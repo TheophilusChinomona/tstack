@@ -2,7 +2,7 @@
 
 **Status:** V1.1 plan (not yet implemented).
 **Extracted from:** [PLAN_TUNING_V1.md](./PLAN_TUNING_V1.md) during implementation, when review rigor revealed the pacing workstream had structural gaps unfixable via plan-text editing.
-**Authors:** Garry Tan (user), with AI-assisted reviews from Claude Opus 4.7 + OpenAI Codex gpt-5.4.
+**Authors:** gstack contributors, with AI-assisted reviews from Claude + OpenAI Codex.
 **Review plan:** CEO + Codex + DX + Eng cycle, same rigor as V1.
 
 ## Credit

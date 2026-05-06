@@ -1001,7 +1001,6 @@ Linux cookie import shipped in v0.11.11.0 (Wave 3). Supports Chrome, Chromium, B
 **Priority:** P2
 **Depends on:** None
 
-
 ### Visual verification with screenshots in PR body
 
 **What:** /ship Step 7.5: screenshot key pages after push, embed in PR body.
@@ -1161,8 +1160,6 @@ Linux cookie import shipped in v0.11.11.0 (Wave 3). Supports Chrome, Chromium, B
 **Priority:** P3
 **Depends on:** Video recording
 
-
-
 ### Extend worktree isolation to Claude E2E tests
 
 **What:** Add `useWorktree?: boolean` option to `runSkillTest()` so any Claude E2E test can opt into worktree mode for full repo context instead of tmpdir fixtures.
@@ -1312,7 +1309,6 @@ Shipped in v0.8.3. Step 8.5 added to `/ship` — after creating the PR, `/ship` 
 **Effort:** S
 **Priority:** P3
 **Depends on:** gstack-diff-scope (shipped)
-
 
 ## Codex
 

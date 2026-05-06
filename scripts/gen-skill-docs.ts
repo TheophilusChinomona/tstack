@@ -414,7 +414,6 @@ function processTemplate(tmplPath: string, host: Host = 'claude'): { outputPath:
   const { name: extractedName, description: extractedDescription } = extractNameAndDescription(tmplContent);
   const skillName = extractedName || path.basename(path.dirname(tmplPath));
 
-
   // Extract benefits-from list from frontmatter (inline YAML: benefits-from: [a, b])
   const benefitsMatch = tmplContent.match(/^benefits-from:\s*\[([^\]]*)\]/m);
   const benefitsFrom = benefitsMatch

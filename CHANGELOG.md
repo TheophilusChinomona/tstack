@@ -1823,7 +1823,7 @@ The new `/make-pdf` skill takes a `.md` file and produces a publication-quality 
 ### What you can do now
 
 - `$P generate letter.md` writes a clean letter PDF to `/tmp/letter.pdf` with sensible defaults.
-- `$P generate --cover --toc --author "Garry Tan" --title "On Horizons" essay.md essay.pdf` adds a left-aligned cover page (title, subtitle, date, hairline rule) and a TOC from your H1/H2/H3 headings.
+- `$P generate --cover --toc --author "Your Name" --title "On Horizons" essay.md essay.pdf` adds a left-aligned cover page (title, subtitle, date, hairline rule) and a TOC from your H1/H2/H3 headings.
 - `$P generate --watermark DRAFT memo.md draft.pdf` overlays a diagonal DRAFT watermark on every page. Send as draft. Drop the flag when it's final.
 - `$P generate --no-chapter-breaks memo.md` disables the default "every H1 starts a new page" behavior for memos that happen to have multiple top-level headings.
 - `$P generate --allow-network essay.md` lets external images load. Off by default so someone else's markdown can't phone home through a tracking pixel when you generate their PDF.
@@ -2715,11 +2715,11 @@ You can now go from an approved design mockup to production-quality HTML with on
 
 ## [0.13.10.0] - 2026-03-29. Office Hours Gets a Reading List
 
-Repeat /office-hours users now get fresh, curated resources every session instead of the same YC closing. 34 hand-picked videos and essays from Garry Tan, Lightcone Podcast, YC Startup School, and Paul Graham, contextually matched to what came up during the session. The system remembers what it already showed you, so you never see the same recommendation twice.
+Repeat /office-hours users now get fresh, curated resources every session instead of repetitive content. 34 hand-picked videos and essays from founder talks, Lightcone Podcast, YC Startup School, and Paul Graham, contextually matched to what came up during the session. The system remembers what it already showed you, so you never see the same recommendation twice.
 
 ### Added
 
-- **Rotating founder resources in /office-hours closing.** 34 curated resources across 5 categories (Garry Tan videos, YC Backstory, Lightcone Podcast, YC Startup School, Paul Graham essays). Claude picks 2-3 per session based on session context, not randomly.
+- **Rotating founder resources in /office-hours closing.** 34 curated resources across 5 categories (Founder videos?, YC Backstory, Lightcone Podcast, YC Startup School, Paul Graham essays). Claude picks 2-3 per session based on session context, not randomly.
 - **Resource dedup log.** Tracks which resources were shown in `~/.gstack/projects/$SLUG/resources-shown.jsonl` so repeat users always see fresh content.
 - **Resource selection analytics.** Logs which resources get picked to `skill-usage.jsonl` so you can see patterns over time.
 - **Browser-open offer.** After showing resources, offers to open them in your browser so you can check them out later.
@@ -3887,7 +3887,7 @@ Every gstack skill now follows the **Completeness Principle**: always recommend 
 full implementation when AI makes the marginal cost near-zero. No more "Choose B
 because it's 90% of the value" when option A is 70 lines more code.
 
-Read the philosophy: https://garryslist.org/posts/boil-the-ocean
+Read the philosophy: 
 
 - **Completeness scoring**: every AskUserQuestion option now shows a completeness
   score (1-10), biasing toward the complete solution

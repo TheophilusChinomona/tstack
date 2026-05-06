@@ -1,12 +1,12 @@
 # On the LOC controversy
 
-Or: what happened when I mentioned how many lines of code I've been shipping, and what the numbers actually say.
+Or: why logical line counts matter more than raw LOC when measuring AI-assisted productivity.
 
 ## The critique is right. And it doesn't matter.
 
 LOC is a garbage metric. Every senior engineer knows it. Dijkstra wrote in 1988 that lines of code shouldn't be counted as "lines produced" but as "lines spent" ([*On the cruelty of really teaching computing science*, EWD1036](https://www.cs.utexas.edu/~EWD/transcriptions/EWD10xx/EWD1036.html)). The old line (widely attributed to Bill Gates, sourcing murky) puts it more memorably: measuring programming progress by LOC is like measuring aircraft building progress by weight. If you measure programmer productivity in lines of code, you're measuring the wrong thing. This has been true for 40 years and it's still true.
 
-I posted that in the last 60 days I'd shipped 600,000 lines of production code. The replies came in fast:
+The critique often centers around claims of massive code output. The replies come in fast:
 
 - "That's just AI slop."
 - "LOC is a meaningless metric. Every senior engineer in the last 40 years said so."
@@ -16,7 +16,7 @@ I posted that in the last 60 days I'd shipped 600,000 lines of production code. 
 - "Where are your error rates? Your DAUs? Your revert counts?"
 - "This is embarrassing."
 
-Some of those are right. Here's what happens when you take the smart version of the critique seriously and do the math anyway.
+Some of those critiques are valid. Here's what happens when you take the smart version seriously and do the math.
 
 ## Three branches of the AI coding critique
 
@@ -26,7 +26,7 @@ They get collapsed into one, but they're different arguments.
 
 **Branch 2: AI inflates LOC.** True. LLMs generate verbose code by default. More boilerplate. More defensive checks. More comments. More tests. Raw line counts go up even when "real work done" didn't.
 
-**Branch 3: Therefore bragging about LOC is embarrassing.** This is where the argument jumps the track.
+**Branch 3: Therefore high LOC counts are meaningless.** This is where the argument jumps the track.
 
 Branch 2 is the interesting one. If raw LOC is inflated by some factor, the honest thing is to compute the deflation and report the deflated number. That's what this post does.
 
@@ -34,7 +34,7 @@ Branch 2 is the interesting one. If raw LOC is inflated by some factor, the hone
 
 ### Raw numbers
 
-I wrote a script ([`scripts/garry-output-comparison.ts`](../scripts/garry-output-comparison.ts)) that enumerates every commit I authored across all 41 repos owned by `garrytan/*` on GitHub — 15 public, 26 private — in 2013 and 2026. For each commit, it counts logical lines added (non-blank, non-comment). The 2013 corpus includes Bookface, the YC-internal social network I built that year.
+The analysis enumerates commits across multiple repositories, comparing logical line output between 2013 and 2026. For each commit, it counts logical lines added (non-blank, non-comment). The 2013 corpus includes a private project from that year.
 
 One repo excluded from 2026: `tax-app` (demo for a YC video, not production work). Baked into the script's `EXCLUDED_REPOS` constant. Run it yourself.
 
@@ -52,7 +52,7 @@ One repo excluded from 2026: `tax-app` (demo for a YC video, not production work
 
 It was. That's the point.
 
-In 2013 I was a YC partner, then a cofounder at Posterous shipping code nights and weekends. 14 logical lines per day was my actual part-time output while holding down a real job. Historical research puts professional full-time programmer output in a wide band depending on project size and study: Fred Brooks cited ~10 lines/day for systems programming in *The Mythical Man-Month* (OS/360 observations), Capers Jones measured roughly 16-38 LOC/day across thousands of projects, and Steve McConnell's *Code Complete* reports 20-125 LOC/day for small projects (10K LOC) down to 1.5-25 for large projects (10M LOC) — it's size-dependent, not a single number.
+The 2013 baseline represents part-time output while holding down a full-time role. Historical research puts professional full-time programmer output in a wide band depending on project size and study: Fred Brooks cited ~10 lines/day for systems programming in *The Mythical Man-Month* (OS/360 observations), Capers Jones measured roughly 16-38 LOC/day across thousands of projects, and Steve McConnell's *Code Complete* reports 20-125 LOC/day for small projects (10K LOC) down to 1.5-25 for large projects (10M LOC) — it's size-dependent, not a single number.
 
 My 2013 baseline isn't cherry-picked. It's normal for a part-time coder with a day job. If you think the right baseline is 50 (3.5x higher), the 2026 multiple drops from 810x to 228x. Still high.
 
@@ -117,7 +117,7 @@ I'm going to steelman harder than the critics steelmanned themselves:
 
 **Greenfield vs maintenance.** 2026 numbers are dominated by new-project code. Mature-codebase maintenance produces fewer lines per day. If you're asking "can Garry 100x the team maintaining 10 million lines of legacy Java at a bank," my number doesn't prove that. Someone else will have to run their own script on a different context.
 
-**The 2013 baseline has survivorship bias.** My 2013 public activity was low. This analysis includes Bookface (private, 22 active weeks) which was my biggest project that year, so the bias is smaller than it looks. It's not zero. If the true 2013 rate was 50/day instead of 14, the multiple at current pace is 228x instead of 810x. Still high.
+**The 2013 baseline has survivorship bias.** The analysis includes both public and private repositories from the period. It's not zero. Even with a significantly higher assumed baseline, the multiple remains substantial.
 
 **Quality-adjusted productivity isn't fully proven.** I don't have a clean bug-density comparison between 2013-me and 2026-me. What I can say: revert rate is in the normal band, fix rate is healthy, test coverage is real, and the adversarial review process caught 15+ issues on the most recent plan. That's evidence, not proof. A skeptic can discount it.
 

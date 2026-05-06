@@ -160,7 +160,7 @@ function originUrl(): string | null {
 /**
  * Derive a stable source id for the cwd code corpus. Pattern: `gstack-code-<slug>`,
  * where <slug> comes from canonicalizeRemote() then `/` → `-` (e.g.,
- * `github.com/garrytan/gstack` → `gstack-code-github-com-garrytan-gstack`).
+ * `github.com/TheophilusChinomona/gstack` → `gstack-code-github-com-garrytan-gstack`).
  *
  * Falls back to `gstack-code-<basename(repo)>` when there is no origin (local repo).
  */

@@ -145,14 +145,13 @@ touch ~/.gstack/.writing-style-prompted
 
 Skip if `WRITING_STYLE_PENDING` is `no`.
 
-If `LAKE_INTRO` is `no`: say "gstack follows the **Boil the Lake** principle — do the complete thing when AI makes marginal cost near-zero. Read more: https://garryslist.org/posts/boil-the-ocean" Offer to open:
+If `LAKE_INTRO` is `no`: say "gstack follows the **Boil the Lake** principle — do the complete thing when AI makes marginal cost near-zero."
 
 ```bash
-open https://garryslist.org/posts/boil-the-ocean
 touch ~/.gstack/.completeness-intro-seen
 ```
 
-Only run `open` if yes. Always run `touch`.
+Always run `touch`.
 
 If `TEL_PROMPTED` is `no` AND `LAKE_INTRO` is `yes`: ask telemetry once via AskUserQuestion:
 
@@ -332,109 +331,6 @@ Before calling AskUserQuestion, verify:
 - [ ] You are calling the tool, not writing prose
 
 
-## GBrain Sync (skill start)
-
-```bash
-_GSTACK_HOME="${GSTACK_HOME:-$HOME/.gstack}"
-_BRAIN_REMOTE_FILE="$HOME/.gstack-brain-remote.txt"
-_BRAIN_SYNC_BIN="~/.claude/skills/gstack/bin/gstack-brain-sync"
-_BRAIN_CONFIG_BIN="~/.claude/skills/gstack/bin/gstack-config"
-
-# /sync-gbrain context-load: teach the agent to use gbrain when it's available.
-# Mutually exclusive variants per /plan-eng-review §4. Empty string when gbrain
-# is not configured (zero context cost for non-gbrain users).
-_GBRAIN_CONFIG="$HOME/.gbrain/config.json"
-if [ -f "$_GBRAIN_CONFIG" ] && command -v gbrain >/dev/null 2>&1; then
-  _GBRAIN_VERSION_OK=$(gbrain --version 2>/dev/null | grep -c '^gbrain ' || echo 0)
-  if [ "$_GBRAIN_VERSION_OK" -gt 0 ] 2>/dev/null; then
-    _SYNC_STATE="$_GSTACK_HOME/.gbrain-sync-state.json"
-    _CWD_PAGES=0
-    if [ -f "$_SYNC_STATE" ]; then
-      # Flatten newlines so the regex works against pretty-printed JSON too.
-      _CWD_PAGES=$(tr -d '\n' < "$_SYNC_STATE" 2>/dev/null \
-        | grep -o '"name": *"code"[^}]*"detail": *{[^}]*"page_count": *[0-9]*' \
-        | grep -o '"page_count": *[0-9]*' | grep -o '[0-9]\+' | head -1)
-      _CWD_PAGES=${_CWD_PAGES:-0}
-    fi
-    if [ "$_CWD_PAGES" -gt 0 ] 2>/dev/null; then
-      echo "GBrain configured. Prefer \`gbrain search\`/\`gbrain query\` over Grep for"
-      echo "semantic questions; use \`gbrain code-def\`/\`code-refs\`/\`code-callers\` for"
-      echo "symbol-aware code lookup. See \"## GBrain Search Guidance\" in CLAUDE.md."
-      echo "Run /sync-gbrain to refresh."
-    else
-      echo "GBrain configured but this repo isn't indexed yet. Run \`/sync-gbrain --full\`"
-      echo "before relying on \`gbrain search\` for code questions in this repo."
-      echo "Falls back to Grep until indexed."
-    fi
-  fi
-fi
-
-_BRAIN_SYNC_MODE=$("$_BRAIN_CONFIG_BIN" get gbrain_sync_mode 2>/dev/null || echo off)
-
-if [ -f "$_BRAIN_REMOTE_FILE" ] && [ ! -d "$_GSTACK_HOME/.git" ] && [ "$_BRAIN_SYNC_MODE" = "off" ]; then
-  _BRAIN_NEW_URL=$(head -1 "$_BRAIN_REMOTE_FILE" 2>/dev/null | tr -d '[:space:]')
-  if [ -n "$_BRAIN_NEW_URL" ]; then
-    echo "BRAIN_SYNC: brain repo detected: $_BRAIN_NEW_URL"
-    echo "BRAIN_SYNC: run 'gstack-brain-restore' to pull your cross-machine memory (or 'gstack-config set gbrain_sync_mode off' to dismiss forever)"
-  fi
-fi
-
-if [ -d "$_GSTACK_HOME/.git" ] && [ "$_BRAIN_SYNC_MODE" != "off" ]; then
-  _BRAIN_LAST_PULL_FILE="$_GSTACK_HOME/.brain-last-pull"
-  _BRAIN_NOW=$(date +%s)
-  _BRAIN_DO_PULL=1
-  if [ -f "$_BRAIN_LAST_PULL_FILE" ]; then
-    _BRAIN_LAST=$(cat "$_BRAIN_LAST_PULL_FILE" 2>/dev/null || echo 0)
-    _BRAIN_AGE=$(( _BRAIN_NOW - _BRAIN_LAST ))
-    [ "$_BRAIN_AGE" -lt 86400 ] && _BRAIN_DO_PULL=0
-  fi
-  if [ "$_BRAIN_DO_PULL" = "1" ]; then
-    ( cd "$_GSTACK_HOME" && git fetch origin >/dev/null 2>&1 && git merge --ff-only "origin/$(git rev-parse --abbrev-ref HEAD)" >/dev/null 2>&1 ) || true
-    echo "$_BRAIN_NOW" > "$_BRAIN_LAST_PULL_FILE"
-  fi
-  "$_BRAIN_SYNC_BIN" --once 2>/dev/null || true
-fi
-
-if [ -d "$_GSTACK_HOME/.git" ] && [ "$_BRAIN_SYNC_MODE" != "off" ]; then
-  _BRAIN_QUEUE_DEPTH=0
-  [ -f "$_GSTACK_HOME/.brain-queue.jsonl" ] && _BRAIN_QUEUE_DEPTH=$(wc -l < "$_GSTACK_HOME/.brain-queue.jsonl" | tr -d ' ')
-  _BRAIN_LAST_PUSH="never"
-  [ -f "$_GSTACK_HOME/.brain-last-push" ] && _BRAIN_LAST_PUSH=$(cat "$_GSTACK_HOME/.brain-last-push" 2>/dev/null || echo never)
-  echo "BRAIN_SYNC: mode=$_BRAIN_SYNC_MODE | last_push=$_BRAIN_LAST_PUSH | queue=$_BRAIN_QUEUE_DEPTH"
-else
-  echo "BRAIN_SYNC: off"
-fi
-```
-
-
-
-Privacy stop-gate: if output shows `BRAIN_SYNC: off`, `gbrain_sync_mode_prompted` is `false`, and gbrain is on PATH or `gbrain doctor --fast --json` works, ask once:
-
-> gstack can publish your session memory to a private GitHub repo that GBrain indexes across machines. How much should sync?
-
-Options:
-- A) Everything allowlisted (recommended)
-- B) Only artifacts
-- C) Decline, keep everything local
-
-After answer:
-
-```bash
-# Chosen mode: full | artifacts-only | off
-"$_BRAIN_CONFIG_BIN" set gbrain_sync_mode <choice>
-"$_BRAIN_CONFIG_BIN" set gbrain_sync_mode_prompted true
-```
-
-If A/B and `~/.gstack/.git` is missing, ask whether to run `gstack-brain-init`. Do not block the skill.
-
-At skill END before telemetry:
-
-```bash
-"~/.claude/skills/gstack/bin/gstack-brain-sync" --discover-new 2>/dev/null || true
-"~/.claude/skills/gstack/bin/gstack-brain-sync" --once 2>/dev/null || true
-```
-
-
 ## Model-Specific Behavioral Patch (claude)
 
 The following nudges are tuned for the claude model family. They are
@@ -455,7 +351,7 @@ equivalents (cat, sed, find, grep). The dedicated tools are cheaper and clearer.
 
 ## Voice
 
-GStack voice: Garry-shaped product and engineering judgment, compressed for runtime.
+Direct, concrete, builder-to-builder. Compressed engineering judgment for runtime.
 
 - Lead with the point. Say what it does, why it matters, and what changes for the builder.
 - Be concrete. Name files, functions, line numbers, commands, outputs, evals, and real numbers.
@@ -747,12 +643,6 @@ command -v knip >/dev/null 2>&1 && echo "DEADCODE: knip"
 
 # Shell linting
 command -v shellcheck >/dev/null 2>&1 && ls *.sh scripts/*.sh bin/*.sh 2>/dev/null | head -1 | xargs -I{} echo "SHELL: shellcheck"
-
-# GBrain presence (D6) — only report as a dimension if gbrain is actually
-# set up; otherwise skip so machines without gbrain aren't penalized.
-if command -v gbrain >/dev/null 2>&1 && [ -f "$HOME/.gbrain/config.json" ]; then
-  echo "GBRAIN: gbrain doctor --json (wrapped in timeout 5s)"
-fi
 ```
 
 Use Glob to search for shell scripts:
@@ -817,12 +707,11 @@ Score each category on a 0-10 scale using this rubric:
 
 | Category | Weight | 10 | 7 | 4 | 0 |
 |-----------|--------|------|-----------|------------|-----------|
-| Type check | 22% | Clean (exit 0) | <10 errors | <50 errors | >=50 errors |
-| Lint | 18% | Clean (exit 0) | <5 warnings | <20 warnings | >=20 warnings |
-| Tests | 28% | All pass (exit 0) | >95% pass | >80% pass | <=80% pass |
-| Dead code | 13% | Clean (exit 0) | <5 unused exports | <20 unused | >=20 unused |
-| Shell lint | 9% | Clean (exit 0) | <5 issues | >=5 issues | N/A (skip) |
-| GBrain (D6) | 10% | doctor=ok, queue<10, pushed <24h | doctor=warnings OR queue<100 OR pushed <72h | doctor broken OR queue>=100 OR pushed >=72h | N/A (gbrain not installed) |
+| Type check | 25% | Clean (exit 0) | <10 errors | <50 errors | >=50 errors |
+| Lint | 20% | Clean (exit 0) | <5 warnings | <20 warnings | >=20 warnings |
+| Tests | 30% | All pass (exit 0) | >95% pass | >80% pass | <=80% pass |
+| Dead code | 15% | Clean (exit 0) | <5 unused exports | <20 unused | >=20 unused |
+| Shell lint | 10% | Clean (exit 0) | <5 issues | >=5 issues | N/A (skip) |
 
 **Parsing tool output for counts:**
 - **tsc:** Count lines matching `error TS` in output.
@@ -833,30 +722,11 @@ Score each category on a 0-10 scale using this rubric:
 
 **Composite score:**
 ```
-composite = (typecheck_score * 0.22) + (lint_score * 0.18) + (test_score * 0.28) + (deadcode_score * 0.13) + (shell_score * 0.09) + (gbrain_score * 0.10)
+composite = (typecheck_score * 0.25) + (lint_score * 0.20) + (test_score * 0.30) + (deadcode_score * 0.15) + (shell_score * 0.10)
 ```
 
-If a category is skipped (tool not available — includes GBrain when gbrain
-is not installed), redistribute its weight proportionally among the
+If a category is skipped (tool not available), redistribute its weight proportionally among the
 remaining categories.
-
-**GBrain sub-score computation (D6):**
-
-```
-doctor_component: 10 if `gbrain doctor --json | jq -r .status` == "ok";
-                   7 if "warnings"; 0 otherwise (or command times out after 5s).
-queue_component:   10 if ~/.gstack/.brain-queue.jsonl has <10 lines;
-                    7 if 10-100; 0 if >=100 (suggests secret-scan rejections
-                    piling up). N/A if gbrain_sync_mode == off.
-push_component:    10 if (now - mtime of ~/.gstack/.brain-last-push) < 24h;
-                    7 if <72h; 0 if >=72h. N/A if gbrain_sync_mode == off.
-gbrain_score     = 0.5 * doctor_component + 0.3 * queue_component + 0.2 * push_component
-                   (redistribute 0.3 + 0.2 into doctor when sync_mode is off:
-                   gbrain_score = doctor_component in that case)
-```
-
-The `gbrain doctor --json` call MUST be wrapped in `timeout 5s` so a hung
-or misconfigured gbrain doesn't stall the entire /health dashboard.
 
 ---
 
@@ -879,7 +749,6 @@ Lint          biome check .      8/10   WARNING    2s         3 warnings
 Tests         bun test          10/10   CLEAN      12s        47/47 passed
 Dead code     knip               7/10   WARNING    5s         4 unused exports
 Shell lint    shellcheck        10/10   CLEAN      1s         0 issues
-GBrain        gbrain doctor     10/10   CLEAN      <1s        doctor=ok, queue=3, pushed 2h ago
 
 COMPOSITE SCORE: 9.1 / 10
 
@@ -913,19 +782,17 @@ eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)" && mkdir -p ~/.gst
 Append one JSONL line to `~/.gstack/projects/$SLUG/health-history.jsonl`:
 
 ```json
-{"ts":"2026-03-31T14:30:00Z","branch":"main","score":9.1,"typecheck":10,"lint":8,"test":10,"deadcode":7,"shell":10,"gbrain":10,"duration_s":23}
+{"ts":"2026-03-31T14:30:00Z","branch":"main","score":9.1,"typecheck":10,"lint":8,"test":10,"deadcode":7,"shell":10,"duration_s":23}
 ```
 
 Fields:
 - `ts` -- ISO 8601 timestamp
 - `branch` -- current git branch
 - `score` -- composite score (one decimal)
-- `typecheck`, `lint`, `test`, `deadcode`, `shell`, `gbrain` -- individual category scores (integer 0-10)
+- `typecheck`, `lint`, `test`, `deadcode`, `shell` -- individual category scores (integer 0-10)
 - `duration_s` -- total time for all tools in seconds
 
-If a category was skipped, set its value to `null`. Pre-D6 history entries
-won't have a `gbrain` field — treat them as `null` for trend comparison
-and start new tracking from the first post-D6 run.
+If a category was skipped, set its value to `null`.
 
 ---
 
@@ -944,12 +811,12 @@ tail -10 ~/.gstack/projects/$SLUG/health-history.jsonl 2>/dev/null || echo "NO_H
 ```
 HEALTH TREND (last 5 runs)
 ==========================
-Date          Branch         Score   TC   Lint  Test  Dead  Shell  GBrain
-----------    -----------    -----   --   ----  ----  ----  -----  ------
-2026-03-28    main           9.4     10   9     10    8     10     10
-2026-03-29    feat/auth      8.8     10   7     10    7     10     10
-2026-03-30    feat/auth      8.2     10   6     9     7     10      7
-2026-03-31    feat/auth      9.1     10   8     10    7     10     10
+Date          Branch         Score   TC   Lint  Test  Dead  Shell
+----------    -----------    -----   --   ----  ----  ----  -----
+2026-03-28    main           9.4     10   9     10    8     10
+2026-03-29    feat/auth      8.8     10   7     10    7     10
+2026-03-30    feat/auth      8.2     10   6     9     7     10
+2026-03-31    feat/auth      9.1     10   8     10    7     10
 
 Trend: IMPROVING (+0.9 since last run)
 ```

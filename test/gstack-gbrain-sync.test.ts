@@ -94,7 +94,7 @@ describe("gstack-gbrain-sync CLI", () => {
 
   it("dry-run derives a stable source id from the canonical git remote", () => {
     // The source id pattern is `gstack-code-<canonicalized-remote>`. For this
-    // repo (github.com/garrytan/gstack), the slug should appear in the dry-run
+    // repo (github.com/TheophilusChinomona/gstack), the slug should appear in the dry-run
     // preview line. We don't pin the exact slug — just verify the prefix +
     // that the preview command would target a source with id gstack-code-*.
     const home = makeTestHome();

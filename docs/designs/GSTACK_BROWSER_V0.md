@@ -1,9 +1,9 @@
 # GStack Browser V0 — The AI-Native Development Browser
 
 **Date:** 2026-03-30
-**Author:** Garry Tan + Claude Code
+**Author:** gstack contributors
 **Status:** Phase 1a shipped, Phase 1b in progress
-**Branch:** garrytan/gstack-as-browser
+**Branch:** TheophilusChinomona/gstack-as-browser
 
 ## The Thesis
 

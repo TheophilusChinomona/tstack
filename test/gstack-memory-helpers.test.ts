@@ -29,11 +29,11 @@ import {
 
 describe("canonicalizeRemote", () => {
   it("strips https scheme and .git suffix", () => {
-    expect(canonicalizeRemote("https://github.com/garrytan/gstack.git")).toBe("github.com/garrytan/gstack");
+    expect(canonicalizeRemote("https://github.com/TheophilusChinomona/gstack.git")).toBe("github.com/TheophilusChinomona/gstack");
   });
 
   it("normalizes git@host:path scp-style remotes", () => {
-    expect(canonicalizeRemote("git@github.com:garrytan/gstack.git")).toBe("github.com/garrytan/gstack");
+    expect(canonicalizeRemote("git@github.com:TheophilusChinomona/gstack.git")).toBe("github.com/TheophilusChinomona/gstack");
   });
 
   it("strips ssh:// scheme", () => {

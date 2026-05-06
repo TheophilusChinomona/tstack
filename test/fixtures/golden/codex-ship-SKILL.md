@@ -137,10 +137,10 @@ touch ~/.gstack/.writing-style-prompted
 
 Skip if `WRITING_STYLE_PENDING` is `no`.
 
-If `LAKE_INTRO` is `no`: say "gstack follows the **Boil the Lake** principle — do the complete thing when AI makes marginal cost near-zero. Read more: https://garryslist.org/posts/boil-the-ocean" Offer to open:
+If `LAKE_INTRO` is `no`: say "gstack follows the **Boil the Lake** principle — do the complete thing when AI makes marginal cost near-zero. Read more: " Offer to open:
 
 ```bash
-open https://garryslist.org/posts/boil-the-ocean
+open 
 touch ~/.gstack/.completeness-intro-seen
 ```
 
@@ -323,7 +323,6 @@ Before calling AskUserQuestion, verify:
 - [ ] Net line closes the decision
 - [ ] You are calling the tool, not writing prose
 
-
 ## GBrain Sync (skill start)
 
 ```bash
@@ -398,8 +397,6 @@ else
 fi
 ```
 
-
-
 Privacy stop-gate: if output shows `BRAIN_SYNC: off`, `gbrain_sync_mode_prompted` is `false`, and gbrain is on PATH or `gbrain doctor --fast --json` works, ask once:
 
 > gstack can publish your session memory to a private GitHub repo that GBrain indexes across machines. How much should sync?
@@ -426,7 +423,6 @@ At skill END before telemetry:
 "$GSTACK_BIN/gstack-brain-sync" --once 2>/dev/null || true
 ```
 
-
 ## Model-Specific Behavioral Patch (claude)
 
 The following nudges are tuned for the claude model family. They are
@@ -447,7 +443,7 @@ equivalents (cat, sed, find, grep). The dedicated tools are cheaper and clearer.
 
 ## Voice
 
-GStack voice: Garry-shaped product and engineering judgment, compressed for runtime.
+Direct, concrete, builder-to-builder. Compressed engineering judgment for runtime.
 
 - Lead with the point. Say what it does, why it matters, and what changes for the builder.
 - Be concrete. Name files, functions, line numbers, commands, outputs, evals, and real numbers.
@@ -576,7 +572,6 @@ Jargon list, gloss on first use if the term appears:
 - null pointer
 - dangling pointer
 - buffer overflow
-
 
 ## Completeness Principle — Boil the Lake
 
@@ -750,8 +745,6 @@ Print the detected base branch name. In every subsequent `git diff`, `git log`,
 branch name wherever the instructions say "the base branch" or `<default>`.
 
 ---
-
-
 
 # Ship: Fully Automated Ship Workflow
 
@@ -1832,8 +1825,6 @@ Substitute: TIMESTAMP = ISO 8601 datetime, STATUS = "clean" if 0 findings or "is
 
    Include any design findings alongside the code review findings. They follow the same Fix-First flow below.
 
-
-
 ### Step 9.3: Cross-review finding dedup
 
 Before classifying findings, check if any were previously skipped by the user in a prior review on this branch.
@@ -1952,8 +1943,6 @@ For each comment in `comments`:
 
 ---
 
-
-
 ## Capture Learnings
 
 If you discovered a non-obvious pattern, pitfall, or architectural insight during
@@ -1978,8 +1967,6 @@ staleness detection: if those files are later deleted, the learning can be flagg
 
 **Only log genuine discoveries.** Don't log obvious things. Don't log things the user
 already knows. A good test: would this insight save time in a future session? If yes, log it.
-
-
 
 ## Step 12: Version bump (auto-decide)
 

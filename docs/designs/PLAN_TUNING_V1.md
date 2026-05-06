@@ -2,7 +2,7 @@
 
 **Status:** Approved for implementation (2026-04-18)
 **Branch:** garrytan/plan-tune-skill
-**Authors:** Garry Tan (user), with AI-assisted reviews from Claude Opus 4.7 + OpenAI Codex gpt-5.4
+**Authors:** gstack contributors, with AI-assisted reviews from Claude + OpenAI Codex
 **Supersedes scope:** adds writing-style + LOC-receipts layer on top of [PLAN_TUNING_V0.md](./PLAN_TUNING_V0.md) (observational substrate). V0 remains in place unchanged.
 **Related:** [PACING_UPDATES_V0.md](./PACING_UPDATES_V0.md) — extracted pacing overhaul, V1.1 plan.
 

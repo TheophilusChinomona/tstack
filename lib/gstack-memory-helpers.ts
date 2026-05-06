@@ -85,8 +85,8 @@ export interface ErrorContextEntry {
  * (per ED1 — gbrain-side session_id dedup uses repo as a tag).
  *
  * Examples:
- *   https://github.com/garrytan/gstack.git → github.com/garrytan/gstack
- *   git@github.com:garrytan/gstack.git     → github.com/garrytan/gstack
+ *   https://github.com/TheophilusChinomona/gstack.git → github.com/TheophilusChinomona/gstack
+ *   git@github.com:TheophilusChinomona/gstack.git     → github.com/TheophilusChinomona/gstack
  *   ssh://git@gitlab.com/foo/bar           → gitlab.com/foo/bar
  *   (empty / null)                         → ""
  */

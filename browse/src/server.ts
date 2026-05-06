@@ -313,7 +313,6 @@ const CONSOLE_LOG_PATH = config.consoleLog;
 const NETWORK_LOG_PATH = config.networkLog;
 const DIALOG_LOG_PATH = config.dialogLog;
 
-
 // ─── Sidebar agent / chat state ripped ──────────────────────────────
 // ChatEntry, SidebarSession, TabAgentState interfaces; chatBuffer,
 // chatBuffers, sidebarSession, agentProcess, agentStatus, agentStartTime,
@@ -1633,7 +1632,6 @@ async function start() {
         });
       }
 
-
       // ─── Sidebar chat endpoints ripped ──────────────────────────────
       // /sidebar-tabs, /sidebar-tabs/switch, /sidebar-chat[/clear],
       // /sidebar-command, /sidebar-agent/{event,kill,stop},
@@ -1641,7 +1639,6 @@ async function start() {
       // here. They drove the one-shot claude -p chat queue. Replaced by
       // the interactive PTY in terminal-agent.ts; the queue + browser-tab
       // multiplexing are no longer needed.
-
 
       // ─── Batch endpoint — N commands, 1 HTTP round-trip ─────────────
       // Accepts both root AND scoped tokens (same as /command).

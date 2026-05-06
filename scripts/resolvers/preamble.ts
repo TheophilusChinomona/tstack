@@ -15,7 +15,6 @@
  *   2. If _TEL != "off" AND binary exists: gstack-telemetry-log for remote reporting
  */
 
-
 import type { TemplateContext } from './types';
 import { generateModelOverlay } from './model-overlay';
 import { generateQuestionTuning } from './question-tuning';
@@ -38,10 +37,7 @@ import { generateSpawnedSessionCheck } from './preamble/generate-spawned-session
 import { generateWritingStyleMigration } from './preamble/generate-writing-style-migration';
 
 // Host-specific instructions
-import { generateBrainHealthInstruction } from './preamble/generate-brain-health-instruction';
-
-// GBrain cross-machine sync (runs at skill start; end-side handled in completion-status)
-import { generateBrainSyncBlock } from './preamble/generate-brain-sync-block';
+// Stripped: gbrain self-promotion removed
 
 // Behavioral / voice
 import { generateVoiceDirective } from './preamble/generate-voice-directive';
@@ -95,13 +91,13 @@ export function generatePreamble(ctx: TemplateContext): string {
     generateRoutingInjection(ctx),
     generateVendoringDeprecation(ctx),
     generateSpawnedSessionCheck(),
-    generateBrainHealthInstruction(ctx),
+    // Stripped: gbrain self-promotion removed
     // AskUserQuestion Format renders BEFORE the model overlay so the pacing rule
     // is the ambient default; the overlay's behavioral nudges land as subordinate
     // patches. Opus 4.7 reads top-to-bottom and absorbs the first pacing directive
     // it hits; reversing this order regresses plan-review cadence (v1.6.4.0 bug).
     ...(tier >= 2 ? [generateAskUserFormat(ctx)] : []),
-    generateBrainSyncBlock(ctx),
+    // Stripped: gbrain self-promotion removed
     generateModelOverlay(ctx),
     generateVoiceDirective(tier),
     ...(tier >= 2 ? [

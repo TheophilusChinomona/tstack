@@ -2,7 +2,7 @@
 
 **Status:** Approved for v1 implementation
 **Branch:** garrytan/plan-tune-skill
-**Authors:** Garry Tan (user), with AI-assisted reviews from Claude Opus 4.7 + OpenAI Codex gpt-5.4
+**Authors:** gstack contributors, with AI-assisted reviews from Claude + OpenAI Codex
 **Date:** 2026-04-16
 
 ## What this document is
@@ -402,4 +402,4 @@ Initial user position (office-hours): "The psychographic IS the differentiation.
 
 ## Credits and caveats
 
-This plan was developed through an iterative AI-collaboration loop over ~6 hours of planning. The author (Garry Tan) directed every scope decision; AI voices (Claude Opus 4.7 and OpenAI Codex gpt-5.4) challenged and refined the plan. Without Codex's outside voice, a much larger and less-defensible plan would have shipped. The value of cross-model review on high-stakes architectural changes is real and measurable.
+This plan was developed through an iterative AI-collaboration loop. Cross-model review on high-stakes architectural changes proved valuable and measurable.

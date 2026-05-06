@@ -25,30 +25,6 @@ triggers:
   - expand scope
   - strategy review
   - rethink this plan
-gbrain:
-  schema: 1
-  context_queries:
-    - id: prior-ceo-plans
-      kind: filesystem
-      glob: "~/.gstack/projects/{repo_slug}/ceo-plans/*.md"
-      sort: mtime_desc
-      limit: 5
-      render_as: "## Prior CEO plans for this project"
-    - id: recent-design-docs
-      kind: filesystem
-      glob: "~/.gstack/projects/{repo_slug}/*-design-*.md"
-      sort: mtime_desc
-      limit: 3
-      render_as: "## Recent design docs for this project"
-    - id: recent-reviews
-      kind: list
-      filter:
-        type: timeline
-        tags_contains: "repo:{repo_slug}"
-        content_contains: "plan-ceo-review"
-      sort: updated_at_desc
-      limit: 5
-      render_as: "## Recent CEO review activity"
 ---
 
 {{PREAMBLE}}
@@ -219,8 +195,6 @@ Run the three-layer synthesis:
 Feed into the Premise Challenge (0A) and Dream State Mapping (0C). If you find a eureka moment, surface it during the Expansion opt-in ceremony as a differentiation opportunity. Log it (see preamble).
 
 {{LEARNINGS_SEARCH}}
-
-{{GBRAIN_CONTEXT_LOAD}}
 
 ## Step 0: Nuclear Scope Challenge + Mode Selection
 
@@ -847,8 +821,6 @@ If promoted, copy the CEO plan content to `docs/designs/{FEATURE}.md` (create th
 * Use **CRITICAL GAP** / **WARNING** / **OK** for scannability.
 
 {{LEARNINGS_LOG}}
-
-{{GBRAIN_SAVE_RESULTS}}
 
 ## Mode Quick Reference
 ```
