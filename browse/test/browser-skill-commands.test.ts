@@ -222,26 +222,63 @@ describe('buildSpawnEnv', () => {
   });
 
   it('trusted: keeps $HOME', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.HOME).toBe('/Users/test');
   });
 
   it('trusted: still strips GSTACK_TOKEN (defense in depth)', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.GSTACK_TOKEN).toBeUndefined();
   });
 
   it('trusted: keeps developer secrets (intentional)', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.GITHUB_TOKEN).toBe('gh-secret');
   });
 
   it('GSTACK_PORT/GSTACK_SKILL_TOKEN can never be overridden by parent env', () => {
     process.env.GSTACK_PORT = '99999'; // attacker-set
     process.env.GSTACK_SKILL_TOKEN = 'attacker-tok';
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'real-tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'real-tok' });
     expect(env.GSTACK_PORT).toBe('1234');
     expect(env.GSTACK_SKILL_TOKEN).toBe('real-tok');
+  });
+
+  // ── Trust policy: frontmatter `trusted` alone is not authorization ──
+
+  it('frontmatter trusted:true without operator grant → scrubbed env', () => {
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: false, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+    expect(env.OPENAI_API_KEY).toBeUndefined();
+    expect(env.PATH).not.toContain('/test/bin');
+  });
+
+  it('frontmatter trusted:true without operator grant (default) → scrubbed env', () => {
+    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+  });
+
+  it('frontmatter trusted:false with operator grant → still scrubbed', () => {
+    const env = buildSpawnEnv({ trusted: false, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+  });
+
+  it('untrusted: child never sees GSTACK_TOKEN even if parent has it', () => {
+    const env = buildSpawnEnv({ trusted: false, port: 1234, skillToken: 'tok' });
+    expect(env.GSTACK_TOKEN).toBeUndefined();
+  });
+
+  it('untrusted: child never sees provider/cloud/SSH keys', () => {
+    process.env.ANTHROPIC_API_KEY = 'anthropic-secret';
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = '/path/to/creds.json';
+    process.env.SSH_PRIVATE_KEY = 'ssh-secret';
+    const env = buildSpawnEnv({ trusted: false, port: 1234, skillToken: 'tok' });
+    expect(env.ANTHROPIC_API_KEY).toBeUndefined();
+    expect(env.GOOGLE_APPLICATION_CREDENTIALS).toBeUndefined();
+    expect(env.SSH_PRIVATE_KEY).toBeUndefined();
   });
 });
 

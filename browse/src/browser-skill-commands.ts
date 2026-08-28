@@ -155,6 +155,10 @@ async function handleRun(args: string[], ctx: SkillCommandContext): Promise<stri
     skill,
     skillArgs: passthrough,
     trusted: skill.frontmatter.trusted,
+    // CLI skill runs are untrusted by default — frontmatter `trusted` is
+    // descriptive metadata only. Trust elevation requires an explicit
+    // operator decision (e.g. a user-confirmed grant), not a repo flag.
+    operatorTrustGranted: false,
     timeoutSeconds,
     port: ctx.port,
   });
@@ -326,7 +330,16 @@ function handleRm(args: string[], ctx: SkillCommandContext): string {
 export interface SpawnSkillOptions {
   skill: BrowserSkill;
   skillArgs: string[];
+  /** Frontmatter `trusted` flag — descriptive metadata only, not authorization. */
   trusted: boolean;
+  /**
+   * Explicit operator-controlled trust decision. When true AND the skill's
+   * frontmatter says `trusted: true`, the skill inherits the full process env.
+   * When false (default), the skill always gets a scrubbed env regardless of
+   * frontmatter. This prevents a repository-controlled SKILL.md from
+   * self-elevating to credential-bearing status.
+   */
+  operatorTrustGranted?: boolean;
   timeoutSeconds: number;
   port: number;
 }
@@ -358,8 +371,17 @@ export async function spawnSkill(opts: SpawnSkillOptions): Promise<SpawnSkillRes
   });
 
   try {
+    // Audit: log when a skill requests trust but operator hasn't granted it.
+    if (opts.trusted && !opts.operatorTrustGranted) {
+      console.warn(
+        `[trust-audit] skill="${opts.skill.name}" frontmatter.trusted=true ` +
+        `operatorTrustGranted=false — trust elevation DENIED; using scrubbed env.`
+      );
+    }
+
     const env = buildSpawnEnv({
       trusted: opts.trusted,
+      operatorTrustGranted: opts.operatorTrustGranted,
       port: opts.port,
       skillToken: tokenInfo.token,
     });
@@ -409,6 +431,8 @@ const UNTRUSTED_ALLOWLIST = new Set([
 
 interface BuildEnvOptions {
   trusted: boolean;
+  /** Explicit operator-controlled trust decision. Required for trusted env. */
+  operatorTrustGranted?: boolean;
   port: number;
   skillToken: string;
 }
@@ -416,7 +440,12 @@ interface BuildEnvOptions {
 export function buildSpawnEnv(opts: BuildEnvOptions): Record<string, string> {
   const out: Record<string, string> = {};
 
-  if (opts.trusted) {
+  // Trust elevation requires BOTH frontmatter `trusted: true` AND an explicit
+  // operator decision. A repository-controlled SKILL.md cannot self-elevate
+  // by setting `trusted: true` alone.
+  const grantTrusted = opts.trusted && opts.operatorTrustGranted === true;
+
+  if (grantTrusted) {
     // Trusted: pass through process.env, but always strip the daemon root token
     // if the parent had one in env (defense in depth).
     for (const [k, v] of Object.entries(process.env)) {
@@ -441,7 +470,7 @@ export function buildSpawnEnv(opts: BuildEnvOptions): Record<string, string> {
   // Drop anything that pattern-matches a secret. (Trusted path can have secrets
   // intentionally — e.g. an internal-tool skill — but we still strip GSTACK_TOKEN
   // above.)
-  if (!opts.trusted) {
+  if (!grantTrusted) {
     for (const k of Object.keys(out)) {
       if (SECRET_KEY_PATTERNS.some(p => p.test(k))) delete out[k];
     }

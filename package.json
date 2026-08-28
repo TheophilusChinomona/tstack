@@ -80,7 +80,13 @@
     "xterm-addon-fit": "^0.8.0"
   },
   "overrides": {
-    "adm-zip": "^0.6.0"
+    "protobufjs": "7.6.6",
+    "sharp": "0.35.4",
+    "ip-address": "10.5.0",
+    "adm-zip": "^0.6.0",
+    "socks": "^2.8.9",
+    "html-to-docx": "1.8.0",
+    "image-size": "1.2.1"
   },
   "patchedDependencies": {
     "playwright-core@1.62.1": "patches/playwright-core@1.62.1.patch"
