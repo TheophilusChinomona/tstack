@@ -1,5 +1,5 @@
 {
-  "name": "gstack",
+  "name": "tstack",
   "version": "1.71.0",
   "description": "gstack — AI engineering workflow (Theophilus Chinomona fork). Security-hardened: immutable CI, trust boundary fixes, dependency overrides, scheduled upstream audit.",
   "license": "MIT",

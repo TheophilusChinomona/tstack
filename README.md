@@ -1,22 +1,22 @@
-# gstack
+# tstack
 
 > AI engineering workflow — slash commands for Claude Code, Codex, Cursor, and other agents.
 
-**gstack** gives your coding agent structured roles: product reviewer, architect, designer, QA lead, security officer, release engineer. Think → Plan → Build → Review → Test → Ship → Reflect.
+**tstack** gives your coding agent structured roles: product reviewer, architect, designer, QA lead, security officer, release engineer. Think → Plan → Build → Review → Test → Ship → Reflect.
 
 This fork is maintained by [Theophilus Chinomona](https://github.com/TheophilusChinomona). It includes security remediation (immutable CI dependencies, trust boundary hardening, dependency overrides) and a scheduled upstream-audit workflow that tests every incoming change before merge.
 
 ## Install
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/TheophilusChinomona/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup
+git clone --single-branch --depth 1 https://github.com/TheophilusChinomona/tstack.git ~/.claude/skills/tstack && cd ~/.claude/skills/tstack && ./setup
 ```
 
 Then add to your project's `CLAUDE.md`:
 
 ```markdown
-## gstack
-Use /browse from gstack for all web browsing.
+## tstack
+Use /browse from tstack for all web browsing.
 Available skills: /office-hours, /plan-ceo-review, /plan-eng-review, /plan-design-review,
 /design-consultation, /design-shotgun, /design-html, /review, /ship, /land-and-deploy,
 /canary, /benchmark, /browse, /qa, /qa-only, /design-review, /setup-browser-cookies,
