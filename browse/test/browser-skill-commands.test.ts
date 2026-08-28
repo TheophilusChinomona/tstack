@@ -210,26 +210,64 @@ describe('buildSpawnEnv', () => {
   });
 
   it('trusted: keeps $HOME', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.HOME).toBe('/Users/test');
   });
 
   it('trusted: still strips GSTACK_TOKEN (defense in depth)', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.GSTACK_TOKEN).toBeUndefined();
   });
 
   it('trusted: keeps developer secrets (intentional)', () => {
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
     expect(env.GITHUB_TOKEN).toBe('gh-secret');
   });
 
   it('GSTACK_PORT/GSTACK_SKILL_TOKEN can never be overridden by parent env', () => {
     process.env.GSTACK_PORT = '99999'; // attacker-set
     process.env.GSTACK_SKILL_TOKEN = 'attacker-tok';
-    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'real-tok' });
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: true, port: 1234, skillToken: 'real-tok' });
     expect(env.GSTACK_PORT).toBe('1234');
     expect(env.GSTACK_SKILL_TOKEN).toBe('real-tok');
+  });
+
+  // ── Trust policy: frontmatter `trusted` alone is not authorization ──
+
+  it('frontmatter trusted:true without operator grant → scrubbed env', () => {
+    const env = buildSpawnEnv({ trusted: true, operatorTrustGranted: false, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+    expect(env.OPENAI_API_KEY).toBeUndefined();
+    expect(env.PATH).not.toContain('/test/bin');
+  });
+
+  it('frontmatter trusted:true without operator grant (default) → scrubbed env', () => {
+    // operatorTrustGranted omitted = false → scrubbed
+    const env = buildSpawnEnv({ trusted: true, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+  });
+
+  it('frontmatter trusted:false with operator grant → still scrubbed (frontmatter must also say true)', () => {
+    const env = buildSpawnEnv({ trusted: false, operatorTrustGranted: true, port: 1234, skillToken: 'tok' });
+    expect(env.HOME).toBeUndefined();
+    expect(env.GITHUB_TOKEN).toBeUndefined();
+  });
+
+  it('untrusted: child never sees GSTACK_TOKEN even if parent has it', () => {
+    const env = buildSpawnEnv({ trusted: false, port: 1234, skillToken: 'tok' });
+    expect(env.GSTACK_TOKEN).toBeUndefined();
+  });
+
+  it('untrusted: child never sees provider/cloud/SSH keys', () => {
+    process.env.ANTHROPIC_API_KEY = 'anthropic-secret';
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = '/path/to/creds.json';
+    process.env.SSH_PRIVATE_KEY = 'ssh-secret';
+    const env = buildSpawnEnv({ trusted: false, port: 1234, skillToken: 'tok' });
+    expect(env.ANTHROPIC_API_KEY).toBeUndefined();
+    expect(env.GOOGLE_APPLICATION_CREDENTIALS).toBeUndefined();
+    expect(env.SSH_PRIVATE_KEY).toBeUndefined();
   });
 });
 
@@ -305,7 +343,7 @@ describe.skipIf(SKIP_SPAWN)('spawnSkill: lifecycle', () => {
     try {
       const skill = readBrowserSkill('env-trusted', tiers)!;
       const result = await spawnSkill({
-        skill, skillArgs: [], trusted: true, timeoutSeconds: 30, port: 9999,
+        skill, skillArgs: [], trusted: true, operatorTrustGranted: true, timeoutSeconds: 30, port: 9999,
       });
       const parsed = JSON.parse(result.stdout);
       expect(parsed.home).toBe('/Users/test-user');
@@ -356,4 +394,39 @@ describe.skipIf(SKIP_SPAWN)('spawnSkill: lifecycle', () => {
     expect(result.truncated).toBe(true);
     expect(result.stdout.length).toBeLessThanOrEqual(1024 * 1024);
   }, 10_000);
+
+  // ── Trust policy: project/agent skills cannot self-elevate ──
+
+  it('project skill with trusted:true frontmatter cannot read secrets', async () => {
+    const dir = makeSkillDir(tiers.project!, 'project-secrets',
+      'name: project-secrets\nhost: x.com\ntrusted: true',
+      `console.log(JSON.stringify({
+        home: process.env.HOME ?? null,
+        gh: process.env.GITHUB_TOKEN ?? null,
+        gstack: process.env.GSTACK_TOKEN ?? null,
+        port: process.env.GSTACK_PORT ?? null,
+        token: process.env.GSTACK_SKILL_TOKEN ?? null,
+      }));`,
+    );
+    const origEnv = { ...process.env };
+    process.env.GITHUB_TOKEN = 'gh-project-secret';
+    process.env.GSTACK_TOKEN = 'root-project';
+    try {
+      const skill = readBrowserSkill('project-secrets', tiers)!;
+      // CLI path: operatorTrustGranted defaults to false
+      const result = await spawnSkill({
+        skill, skillArgs: [], trusted: skill.frontmatter.trusted,
+        timeoutSeconds: 30, port: 7777,
+      });
+      expect(result.exitCode).toBe(0);
+      const parsed = JSON.parse(result.stdout);
+      expect(parsed.home).toBeNull();
+      expect(parsed.gh).toBeNull();
+      expect(parsed.gstack).toBeNull();
+      expect(parsed.port).toBe('7777');
+      expect(parsed.token).toMatch(/^gsk_sess_/);
+    } finally {
+      process.env = origEnv;
+    }
+  });
 });
