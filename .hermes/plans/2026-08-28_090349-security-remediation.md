@@ -36,7 +36,7 @@
 - Test: `browse/test/browser-skill-commands.test.ts`, `browse/test/url-validation.test.ts`
 
 **Steps:**
-1. From `C:/Users/Givemore/gstack-theophilus`, verify `origin` is `https://github.com/TheophilusChinomona/gstack.git` and `upstream` is `https://github.com/garrytan/gstack.git`.
+1. From `C:/Users/Givemore/Desktop/Theo/Skills and plugins/gstack-theophilus`, verify `origin` is `https://github.com/TheophilusChinomona/gstack.git` and `upstream` is `https://github.com/garrytan/gstack.git`.
 2. Create a branch named `security/remediation-audit-findings`.
 3. Run `bun audit --audit-level=moderate --json` and save only non-secret package/version/advisory metadata to the review notes.
 4. Run the targeted security suite and record the current failures without changing tests yet.
