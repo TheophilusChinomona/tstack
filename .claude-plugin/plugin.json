@@ -1,0 +1,38 @@
+{
+  "name": "tstack",
+  "version": "2.0.0",
+  "description": "AI engineering workflow skills — plan, test, implement, review, verify, remember, improve",
+  "author": {
+    "name": "Theophilus Chinomona",
+    "url": "https://github.com/TheophilusChinomona"
+  },
+  "homepage": "https://github.com/TheophilusChinomona/tstack",
+  "repository": "https://github.com/TheophilusChinomona/tstack",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "agents",
+    "skills",
+    "tdd",
+    "code-review",
+    "security",
+    "workflow",
+    "automation",
+    "best-practices"
+  ],
+  "userConfig": {
+    "auto_upgrade": {
+      "type": "boolean",
+      "title": "Auto-upgrade tstack",
+      "description": "Automatically install new versions when available.",
+      "default": false
+    }
+  },
+  "mcpServers": {},
+  "skills": [
+    "./skills/"
+  ],
+  "commands": [
+    "./commands/"
+  ]
+}

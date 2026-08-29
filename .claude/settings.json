@@ -1,0 +1,30 @@
+{
+  "env": {
+    "TSTACK_AUTO_UPGRADE": "false"
+  },
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "AskUserQuestion",
+      "WebSearch",
+      "WebFetch"
+    ]
+  },
+  "hooks": {
+    "PrePrompt": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-prompt.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

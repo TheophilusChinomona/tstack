@@ -2,7 +2,7 @@
 name: tstack
 preamble-tier: 1
 version: 2.0.0
-description: Router for the tstack skill suite. (tstack)
+description: Router for the tstack skill suite.
 allowed-tools:
   - Bash
   - Read
@@ -15,13 +15,11 @@ triggers:
 
 # tstack — AI Engineering Workflow
 
-tstack is a collection of SKILL.md files that give AI agents structured roles for
-software development. Each skill is a specialist: CEO reviewer, eng manager,
-designer, QA lead, release engineer, debugger, and more.
+tstack is a collection of SKILL.md files that give AI agents structured roles for software development. Each skill is a specialist: CEO reviewer, eng manager, designer, QA lead, release engineer, debugger, and more.
 
 ## Available skills
 
-Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global install).
+Skills live in `skills/[skill-name]/SKILL.md` (or `~/.claude/skills/tstack/` on Claude Code install).
 
 ### Plan-mode reviews
 
@@ -31,7 +29,7 @@ Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global insta
 | `plan-ceo-review` | CEO-level review: find the 10-star product in the request. |
 | `plan-eng-review` | Lock architecture, data flow, edge cases, and tests. |
 | `plan-design-review` | Rate each design dimension 0-10, explain what a 10 looks like. |
-| `plan-devex-review` | DX-mode review: TTHW, magical moments, friction points, persona traces. |
+| `plan-devex-review` | DX-mode review: TTHW, magical moments, friction points. |
 | `autoplan` | One command runs CEO → design → eng → DX review. |
 | `design-consultation` | Build a complete design system from scratch. |
 | `spec` | Turn vague intent into a precise, executable spec. |
@@ -45,10 +43,10 @@ Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global insta
 | `investigate` | Systematic root-cause debugging. No fixes without investigation. |
 | `design-review` | Live-site visual audit + fix loop with atomic commits. |
 | `design-shotgun` | Generate multiple AI design variants, comparison board, iterate. |
-| `design-html` | Generate production-quality Pretext-native HTML/CSS. |
+| `design-html` | Generate production-quality HTML/CSS. |
 | `devex-review` | Live developer experience audit (TTHW measured against the real flow). |
 | `qa` | Open a real browser, find bugs, fix them, re-verify. |
-| `qa-only` | Same methodology as qa but report only — no code changes. |
+| `qa-only` | Same methodology as /qa but report only — no code changes. |
 | `scrape` | Pull data from a web page. |
 | `skillify` | Codify the most recent successful scrape flow into a permanent browser-skill. |
 
@@ -71,7 +69,6 @@ Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global insta
 | `context-save` | Save working context (git state, decisions, remaining work). |
 | `context-restore` | Resume from a saved context. |
 | `learn` | Manage what tstack learned across sessions. |
-| `retro` | Weekly retro with per-person breakdowns and shipping streaks. |
 | `health` | Code quality dashboard (type checker, linter, tests, dead code). |
 | `benchmark` | Performance regression detection (page load, Core Web Vitals). |
 | `cso` | OWASP Top 10 + STRIDE security audit. |
@@ -82,7 +79,7 @@ Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global insta
 | Skill | What it does |
 |-------|-------------|
 | `browse` | Headless browser — real Chromium, real clicks, ~100ms/command. |
-| `open-tstack-browser` | Launch the visible the browser with sidebar + stealth. |
+| `open-browser` | Launch visible browser with sidebar + stealth. |
 | `setup-browser-cookies` | Import cookies from your real browser for authenticated testing. |
 | `pair-agent` | Pair a remote AI agent with your browser. |
 
@@ -95,12 +92,6 @@ Skills live in `./[skill-name]/SKILL.md` (or `~/.tstack/skills/` on global insta
 | `guard` | Activate both careful + freeze at once. |
 | `unfreeze` | Remove directory edit restrictions. |
 | `make-pdf` | Turn any markdown file into a publication-quality PDF. |
-
-### Release + deploy (legacy)
-
-| Skill | What it does |
-|-------|-------------|
-| `landing-report` | Read-only dashboard for the workspace-aware ship queue. |
 
 ## Build commands
 
@@ -119,3 +110,4 @@ bun run skill:check      # health dashboard for all skills
 - The browse binary provides headless browser access. Use `$B <command>` in skills.
 - Safety skills (careful, freeze, guard) use inline advisory prose — always confirm before destructive operations.
 - State paths resolve via `bin/tstack-paths` (sourced via `eval "$(...)"`). Honors `TSTACK_HOME`.
+- Skills live in `skills/` — invoke by name (e.g., `/office-hours`).
