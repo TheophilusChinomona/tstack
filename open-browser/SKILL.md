@@ -1,10 +1,10 @@
 ---
-name: open-gstack-browser
+name: open-browser
 preamble-tier: 1
 version: 0.2.0
 description: Launch the browser — AI-controlled Chromium with the sidebar extension baked in.
 triggers:
-  - open gstack browser
+  - open browser
   - launch chromium
   - show me the browser
 allowed-tools:
@@ -18,7 +18,7 @@ allowed-tools:
 
 Opens a visible browser window where you can watch every action in real time.
 The sidebar shows a live activity feed and chat. Anti-bot stealth built in.
-Use when asked to "open gstack browser", "launch browser", "connect chrome",
+Use when asked to "open browser", "launch browser", "connect chrome",
 "open chrome", "real browser", "launch chrome", "side panel", or "control my browser".
 
 Voice triggers (speech-to-text aliases): "show me the browser".
@@ -73,7 +73,7 @@ Escalate after 3 failed attempts, uncertain security-sensitive changes, or scope
 
 Skills that run plan reviews (`/plan-*-review`, `codex review`) include the EXIT PLAN MODE GATE blocking checklist at the end of the skill, which verifies the plan file ends with `## GSTACK REVIEW REPORT` before ExitPlanMode is called. Skills that don't run plan reviews (operational skills like `ship`, `qa`, `review`) typically don't operate in plan mode and have no review report to verify; this footer is a no-op for them. Writing the plan file is the one edit allowed in plan mode.
 
-# open-gstack-browser — Launch the browser
+# open-browser — Launch the browser
 
 Launch the browser — AI-controlled Chromium with the sidebar extension,
 anti-bot stealth, and custom branding. You see every action in real time.
@@ -145,12 +145,12 @@ $B connect
 
 This launches the browser (rebranded Chromium) in headed mode with:
 - A visible window you can watch (not your regular Chrome — it stays untouched)
-- The gstack sidebar extension auto-loaded via `launchPersistentContext`
+- The sidebar extension auto-loaded via `launchPersistentContext`
 - Anti-bot stealth patches (sites like Google and NYTimes work without captchas)
 - Custom user agent and the browser branding in Dock/menu bar
 - A sidebar agent process for chat commands
 
-The `connect` command auto-discovers the extension from the gstack install
+The `connect` command auto-discovers the extension from the tstack install
 directory. It always uses port **34567** so the extension can auto-connect.
 
 After connecting, print the full output to the user. Confirm you see
@@ -188,14 +188,14 @@ echo "EXTENSION_PATH: ${_EXT_PATH:-NOT FOUND}"
 
 Use AskUserQuestion:
 
-> Chrome is launched with gstack control. You should see Playwright's Chromium
+> Chrome is launched with tstack control. You should see Playwright's Chromium
 > (not your regular Chrome) with a golden shimmer line at the top of the page.
 >
 > The Side Panel extension should be auto-loaded. To open it:
 > 1. Look for the **puzzle piece icon** (Extensions) in the toolbar — it may
->    already show the gstack icon if the extension loaded successfully
-> 2. Click the **puzzle piece** → find **gstack browse** → click the **pin icon**
-> 3. Click the pinned **gstack icon** in the toolbar
+>    already show the tstack icon if the extension loaded successfully
+> 2. Click the **puzzle piece** → find **tstack browse** → click the **pin icon**
+> 3. Click the pinned **tstack icon** in the toolbar
 > 4. The Side Panel should open on the right showing a live activity feed
 >
 > **Port:** 34567 (auto-detected — the extension connects automatically in the
@@ -212,7 +212,7 @@ If B: Tell the user:
 > sometimes it doesn't appear immediately. Try these steps:
 >
 > 1. Type `chrome://extensions` in the address bar
-> 2. Look for **"gstack browse"** — it should be listed and enabled
+> 2. Look for **"tstack browse"** — it should be listed and enabled
 > 3. If it's there but not pinned, go back to any page, click the puzzle piece
 >    icon, and pin it
 > 4. If it's NOT listed at all, click **"Load unpacked"** and navigate to:
@@ -222,7 +222,7 @@ If B: Tell the user:
 >
 > After loading, pin it and click the icon to open the Side Panel.
 >
-> If the Side Panel badge stays gray (disconnected), click the gstack icon
+> If the Side Panel badge stays gray (disconnected), click the tstack icon
 > and enter port **34567** manually.
 
 If C:
@@ -270,7 +270,7 @@ Tell the user:
 > You're all set! Here's what you can do with the connected Chrome:
 >
 > **Watch Claude work in real time:**
-> - Run any gstack skill (`qa`, `design-review`, `benchmark`) and watch
+> - Run any tstack skill (`qa`, `design-review`, `benchmark`) and watch
 >   every action happen in the visible Chrome window + Side Panel feed
 > - No cookie import needed — the Playwright browser shares its own session
 >

@@ -43,7 +43,7 @@ This is the combination of `careful` + `freeze` in a single command.
 
 **Dependency note:** This skill references hook scripts from the sibling `careful`
 and `freeze` skill directories. Both must be installed (they are installed together
-by the gstack setup script).
+by the tstack setup script).
 
 ```bash
 mkdir -p ./docs/analytics

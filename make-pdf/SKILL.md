@@ -2,7 +2,7 @@
 name: make-pdf
 preamble-tier: 1
 version: 1.0.0
-description: Turn any markdown file into a publication-quality PDF. (gstack)
+description: Turn any markdown file into a publication-quality PDF. (tstack)
 triggers:
   - markdown to pdf
   - generate pdf
@@ -33,7 +33,7 @@ Voice triggers (speech-to-text aliases): "make this a pdf", "make it a pdf", "ex
 _SS="./bin/skill-start"
 [ -x "$_SS" ] || _SS=".claude/skills/bin/skill-start"
 "$_SS" --skill "make-pdf" --model "claude" --parent-pid "$PPID" \
-  || echo "SKILL_START: unavailable — stale install; run ./setup or /gstack-upgrade (preamble degraded, continue the user's task)"
+  || echo "SKILL_START: unavailable — stale install; run ./setup or /tstack-upgrade (preamble degraded, continue the user's task)"
 ```
 
 Read the echoed `KEY: value` STATUS lines — they drive every preamble rule
@@ -42,7 +42,7 @@ below. **Degraded mode:** if `SKILL_START_PROTO: 1` is missing from the output
 defaults: treat `SESSION_KIND` as `interactive`, do NOT assume Conductor,
 skip onboarding/telemetry steps (their gates are marker-based, so consent and
 onboarding prompts are DEFERRED to the next healthy run — never lost), tell
-the user to run `./setup` or `/gstack-upgrade`, and proceed with their task.
+the user to run `./setup` or `/tstack-upgrade`, and proceed with their task.
 Note `SESSION_ID` and `TEL_START` from the output — the Telemetry step needs
 them at skill end.
 
@@ -68,12 +68,12 @@ if [ -x "$P" ]; then
   alias _p_="$P"   # shellcheck alias helper (not exported)
   export P   # available as $P in subsequent blocks within the same skill invocation
 else
-  echo "MAKE_PDF_NOT_AVAILABLE (run './setup' in the gstack repo to build it)"
+  echo "MAKE_PDF_NOT_AVAILABLE (run './setup' in the tstack repo to build it)"
 fi
 ```
 
 If `MAKE_PDF_NOT_AVAILABLE` is printed: tell the user the binary is not
-built. Have them run `./setup` from the gstack repo, then retry.
+built. Have them run `./setup` from the tstack repo, then retry.
 
 If `MAKE_PDF_READY` is printed: `$P` is the binary path for the rest of
 the skill. Use `$P` (not an explicit path) so the skill body stays portable.
@@ -101,7 +101,7 @@ If the user invokes a skill in plan mode, the skill takes precedence over generi
 
 If `PROACTIVE` is `"false"`, do not auto-invoke or proactively suggest skills. If a skill seems useful, ask: "I think /skillname might help here — want me to run it?"
 
-If `SKILL_PREFIX` is `"true"`, suggest/invoke `/gstack-*` names. Disk paths stay `./[skill-name]/SKILL.md`.
+If `TSTACK_SKILL_PREFIX` is `"true"`, suggest/invoke `/tstack-*` names. Disk paths stay `./[skill-name]/SKILL.md`.
 
 ## Artifacts Sync (skill start)
 
@@ -219,7 +219,7 @@ $P generate letter.md letter.pdf      # explicit output path
 ### Publication mode — cover + TOC + chapter breaks
 
 ```bash
-$P generate --cover --toc --author "Garry Tan" --title "On Horizons" \
+$P generate --cover --toc --author "Author Name" --title "Document Title" \
   essay.md essay.pdf
 ```
 

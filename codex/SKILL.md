@@ -37,7 +37,7 @@ If `NOT_FOUND`: stop and tell the user:
 If `NOT_FOUND`, also log the event:
 ```bash
 _TEL=$( get telemetry 2>/dev/null || echo off)
-source  2>/dev/null && _gstack_codex_log_event "codex_cli_missing" 2>/dev/null || true
+source  2>/dev/null && codex_log_event "codex_cli_missing" 2>/dev/null || true
 ```
 
 ---
@@ -57,13 +57,13 @@ source
 # CODEX_THREAD_ID / CODEX_SANDBOX into every shell it spawns.
 if [ "${FORCE_CODEX_REVIEW:-0}" != "1" ] && { [ -n "${CODEX_THREAD_ID:-}" ] || [ -n "${CODEX_SANDBOX:-}" ]; }; then
   echo "UNDER_CODEX"
-elif ! _gstack_codex_auth_probe >/dev/null; then
-  _gstack_codex_log_event "codex_auth_failed"
+elif ! codex_auth_probe >/dev/null; then
+  codex_log_event "codex_auth_failed"
   echo "AUTH_FAILED"
 else
-  _gstack_codex_model_probe   # ~10s round trip on first run, cached 1h (#2477)
+  codex_model_probe   # ~10s round trip on first run, cached 1h (#2477)
 fi
-_gstack_codex_version_check   # warns if known-bad, non-blocking
+codex_version_check   # warns if known-bad, non-blocking
 ```
 
 If the output contains `UNDER_CODEX`, stop with exactly one line:
@@ -102,7 +102,7 @@ deadlock fixed in #972.
 ## Step 0.6: Resolve portable roots
 
 Before any mode runs, resolve `$PLAN_ROOT` (where plan files live) and `$TMP_ROOT`
-(where ephemeral codex stderr / response captures land) via `bin/gstack-paths`.
+(where ephemeral codex stderr / response captures land) via `bin/paths`.
 This keeps the skill working whether installed as a Claude Code plugin
 (`SKILL_DATA_DIR` set), a global `./` install, or a CI
 container where `HOME` may be unset and `/tmp` may be read-only.
@@ -419,13 +419,13 @@ If token count is not available, display: `Tokens: unknown`
   before showing it. Show it in full inside the CODEX SAYS block.
 - **Add synthesis after, not instead of.** Any Claude commentary comes after the full output.
 - **Bash gate above the wrapper.** Every Bash call to codex sets its `timeout`
-  parameter ABOVE the inner `_gstack_codex_timeout_wrapper` budget (Review:
+  parameter ABOVE the inner `codex_timeout_wrapper` budget (Review:
   `timeout: 360000` over the 330s wrapper; Challenge/Consult: `timeout: 660000`
   over the 600s wrappers) so the wrapper fires first with a diagnosable exit 124.
 - **No double-reviewing.** If the user already ran `review`, Codex provides a second
   independent opinion. Do not re-run Claude Code's own review.
 - **Detect skill-file rabbit holes.** After receiving Codex output, scan for signs
-  that Codex got distracted by skill files: `config`, `gstack-update-check`,
-  `SKILL.md`, or `skills/gstack`. If any of these appear in the output, append a
-  warning: "Codex appears to have read gstack skill files instead of reviewing your
+  that Codex got distracted by skill files: `config`, `tstack-update-check`,
+  `SKILL.md`, or `skills`. If any of these appear in the output, append a
+  warning: "Codex appears to have read skill files instead of reviewing your
   code. Consider retrying."

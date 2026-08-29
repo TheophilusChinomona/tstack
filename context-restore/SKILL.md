@@ -274,5 +274,5 @@ state, then `context-restore` will find it."
 - **"Most recent" means the filename `YYYYMMDD-HHMMSS` prefix**, not
   `ls -1t` (filesystem mtime). Filenames are stable across file-system
   operations; mtime is not.
-- **This is a gstack skill, not a Claude Code built-in.** When the user types
+- **This is a tstack skill, not a Claude Code built-in.** When the user types
   `context-restore`, invoke this skill via the Skill tool.

@@ -33,8 +33,8 @@ triggers:
 |-----------|---------|-----------------:|
 | Target URL | (auto-detect or required) | `https://myapp.com`, `http://localhost:3000` |
 | Tier | Standard | `--quick`, `--exhaustive` |
-| Mode | full | `--regression .gstackqa-reports/baseline.json` |
-| Output dir | `.gstackqa-reports/` | `Output to /tmpqa` |
+| Mode | full | `--regression .qa-reports/baseline.json` |
+| Output dir | `.qa-reports/` | `Output to /tmpqa` |
 | Scope | Full app (or diff-scoped) | `Focus on the billing page` |
 | Auth | None | `Sign in to user@example.com`, `Import cookies from cookies.json` |
 
@@ -114,7 +114,7 @@ If `NEEDS_SETUP`:
 **Create output directories:**
 
 ```bash
-mkdir -p .gstackqa-reports/screenshots
+mkdir -p .qa-reports/screenshots
 ```
 
 ---
@@ -183,7 +183,7 @@ Record baseline health score at end of Phase 6 (per the Health Score Rubric in t
 ## Output Structure
 
 ```
-.gstackqa-reports/
+.qa-reports/
 ├── qa-report-{domain}-{YYYY-MM-DD}.md    # Structured report
 ├── screenshots/
 │   ├── initial.png                        # Landing page annotated screenshot
@@ -302,7 +302,7 @@ The test MUST:
   ```
   // Regression: ISSUE-NNN — {what broke}
   // Found by qa on {YYYY-MM-DD}
-  // Report: .gstackqa-reportsqa-report-{domain}-{date}.md
+  // Report: .qa-reportsqa-report-{domain}-{date}.md
   ```
 
 Test type decision:
@@ -362,7 +362,7 @@ After all fixes are applied:
 
 Write the report to both local and project-scoped locations:
 
-**Local:** `.gstackqa-reportsqa-report-{domain}-{YYYY-MM-DD}.md`
+**Local:** `.qa-reportsqa-report-{domain}-{YYYY-MM-DD}.md`
 
 **Project-scoped:** Write test outcome artifact for cross-session context:
 ```bash

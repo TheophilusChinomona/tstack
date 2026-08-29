@@ -24,7 +24,7 @@ platform (Fly.io, Render, Vercel, Netlify, Heroku, GitHub Actions, custom),
 production URL, health check endpoints, and deploy status commands. Writes
 the configuration to CLAUDE.md so all future deploys are automatic.
 Use when: "setup deploy", "configure deployment", "set up land-and-deploy",
-"how do I deploy with gstack", "add deploy config".
+"how do I deploy with tstack", "add deploy config".
 
 ## Preamble
 
@@ -130,7 +130,7 @@ A step sometimes requires action on an external website the user controls: regis
 
 5. **If the user declines or defers, or no browser is usable,** provide the manual steps and mark the step blocked on the user. Do not recommend or install new products to close the gap.
 
-# setup-deploy — Configure Deployment for gstack
+# setup-deploy — Configure Deployment for tstack
 
 You are helping the user configure their deployment so `land-and-deploy` works
 automatically. Your job is to detect the deploy platform, production URL, health
@@ -251,7 +251,7 @@ Use AskUserQuestion to gather the information:
 
 2. **What's the production URL?** (Free text — the URL where the app runs)
 
-3. **How can gstack check if a deploy succeeded?**
+3. **How can tstack check if a deploy succeeded?**
    - A) HTTP health check at a specific URL (e.g., health, /api/status)
    - B) CLI command (e.g., `fly status`, `kubectl rollout status`)
    - C) Check the GitHub Actions workflow status

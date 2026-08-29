@@ -146,8 +146,8 @@ You are a QA engineer. Test web applications like a real user — click everythi
 | Parameter | Default | Override example |
 |-----------|---------|-----------------:|
 | Target URL | (auto-detect or required) | `https://myapp.com`, `http://localhost:3000` |
-| Mode | full | `--quick`, `--regression .gstackqa-reports/baseline.json` |
-| Output dir | `.gstackqa-reports/` | `Output to /tmpqa` |
+| Mode | full | `--quick`, `--regression .qa-reports/baseline.json` |
+| Output dir | `.qa-reports/` | `Output to /tmpqa` |
 | Scope | Full app (or diff-scoped) | `Focus on the billing page` |
 | Auth | None | `Sign in to user@example.com`, `Import cookies from cookies.json` |
 
@@ -194,7 +194,7 @@ If `NEEDS_SETUP`:
 **Create output directories:**
 
 ```bash
-REPORT_DIR=".gstackqa-reports"
+REPORT_DIR=".qa-reports"
 mkdir -p "$REPORT_DIR/screenshots"
 ```
 
@@ -531,7 +531,7 @@ Minimum 0 per category.
 
 Write the report to both local and project-scoped locations:
 
-**Local:** `.gstackqa-reportsqa-report-{domain}-{YYYY-MM-DD}.md`
+**Local:** `.qa-reportsqa-report-{domain}-{YYYY-MM-DD}.md`
 
 **Project-scoped:** Write test outcome artifact for cross-session context:
 ```bash
@@ -542,7 +542,7 @@ Write to `./docs/projects/{slug}/{user}-{branch}-test-outcome-{datetime}.md`
 ### Output Structure
 
 ```
-.gstackqa-reports/
+.qa-reports/
 ├── qa-report-{domain}-{YYYY-MM-DD}.md    # Structured report
 ├── screenshots/
 │   ├── initial.png                        # Landing page annotated screenshot

@@ -110,7 +110,7 @@ Decide the output directory: `.diagrams/` when the cwd is a git repo
 ## Step 2 — Stage the render bundle (once per session)
 
 The staged copy is content-addressed (same convention as make-pdf's pre-pass),
-so concurrent sessions and mixed gstack versions never clobber each other:
+so concurrent sessions and mixed tstack versions never clobber each other:
 
 ```bash
 BUNDLE=""

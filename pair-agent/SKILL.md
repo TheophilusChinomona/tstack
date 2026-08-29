@@ -126,7 +126,7 @@ able to browse the web using YOUR browser. This skill makes that happen.
 
 ## How it works
 
-Your gstack browser runs a local HTTP server. This skill creates a one-time setup key,
+Your tstack browser runs a local HTTP server. This skill creates a one-time setup key,
 prints a block of instructions, and you paste those instructions into the other agent.
 The other agent exchanges the key for a session token, creates its own tab, and starts
 browsing. Each agent gets its own tab. They can't mess with each other's tabs.

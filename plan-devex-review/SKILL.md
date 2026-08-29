@@ -53,7 +53,7 @@ AskUserQuestion:
 > D) Let me describe my target developer"
 
 Persona examples by product type (pick the 3 most relevant):
-- **YC founder building MVP** -- 30-minute integration tolerance, won't read docs, copies from README
+- **Startup founder building MVP** -- 30-minute integration tolerance, won't read docs, copies from README
 - **Platform engineer at Series C** -- thorough evaluator, cares about security/SLAs/CI integration
 - **Frontend dev adding a feature** -- TypeScript types, bundle size, React/Vue/Svelte examples
 - **Backend dev integrating an API** -- cURL examples, auth flow clarity, rate limit docs

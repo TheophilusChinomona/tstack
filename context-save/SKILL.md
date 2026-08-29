@@ -354,6 +354,6 @@ If there are no saved contexts, tell the user: "No saved contexts yet. Run
   save creates a new file.
 - **Infer, don't interrogate.** Use git state and conversation context to fill in
   the file. Only use AskUserQuestion if the title genuinely cannot be inferred.
-- **This is a gstack skill, not a Claude Code built-in.** When the user types
+- **This is a tstack skill, not a Claude Code built-in.** When the user types
   `context-save`, invoke this skill via the Skill tool. The old `/checkpoint`
   name collided with Claude Code's native `/rewind` alias — the rename fixed that.

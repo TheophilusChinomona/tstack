@@ -308,16 +308,16 @@ describe('<name> parser', () => {
 
 ## Step 6 — Resolve the canonical SDK path + read it
 
-The canonical SDK lives at `<gstack-install>browse/srcbrowse-client.ts`.
+The canonical SDK lives at `<tstack-install>browse/srcbrowse-client.ts`.
 The bundled-skill loader walks the install tree to find it; mirror that.
 
-Resolve the gstack install dir. Two reliable signals (in order):
+Resolve the tstack install dir. Two reliable signals (in order):
 
 1. The bundled `hackernews-frontpage` skill — look at its tier path from
    `$B skill list` (the `bundled` row). The skill dir is
-   `<gstack-install>browser-skills/hackernews-frontpage/`, so the install
+   `<tstack-install>browser-skills/hackernews-frontpage/`, so the install
    dir is two `dirname` calls above its `_libbrowse-client.ts`.
-2. The active gstack skills install at `./`. Read
+2. The active tstack skills install at `./`. Read
    the symlink target if it's a symlink, otherwise use the path directly.
 
 Example (run as Bun, not bash, to avoid shell-redirect parsing issues):
@@ -329,7 +329,7 @@ import * as path from 'path';
 
 function resolveSdkPath(): string {
   const candidates = [
-    path.join(os.homedir(), '.claude', 'skills', 'gstack', 'browse', 'src', 'browse-client.ts'),
+    path.join(os.homedir(), '.claude', 'skills', 'tstack', 'browse', 'src', 'browse-client.ts'),
     // Add other install-dir candidates if your environment differs.
   ];
   for (const c of candidates) {
@@ -354,7 +354,7 @@ Use the helper at `browse/srcbrowser-skill-write.ts`. Construct an inline
 TypeScript snippet (or shell out to a small Bun one-liner) that calls:
 
 ```ts
-import { stageSkill } from '<gstack-install>browse/srcbrowser-skill-write';
+import { stageSkill } from '<tstack-install>browse/srcbrowser-skill-write';
 
 const stagedDir = stageSkill({
   name: '<name>',
@@ -427,7 +427,7 @@ If the test fails:
    environmental issue (SDK import, daemon connection):
 
    ```ts
-   import { discardStaged } from '<gstack-install>browse/srcbrowser-skill-write';
+   import { discardStaged } from '<tstack-install>browse/srcbrowser-skill-write';
    discardStaged('<stagedDir>');
    ```
 
@@ -465,7 +465,7 @@ this time — they already saw it).
 If the user approved:
 
 ```ts
-import { commitSkill } from '<gstack-install>browse/srcbrowser-skill-write';
+import { commitSkill } from '<tstack-install>browse/srcbrowser-skill-write';
 const dest = commitSkill({
   name: '<name>',
   tier: '<global|project>',  // from step 2 answer
@@ -484,7 +484,7 @@ user dismissed in step 2), report and ask whether to:
 If the user rejected in step 9:
 
 ```ts
-import { discardStaged } from '<gstack-install>browse/srcbrowser-skill-write';
+import { discardStaged } from '<tstack-install>browse/srcbrowser-skill-write';
 discardStaged('<stagedDir>');
 ```
 
@@ -514,7 +514,7 @@ scrape calls matching '<canonical-trigger>' will run in ~200ms."
 - **Bun runtime required.** The codified skill runs as a Bun process
   (`bun run script.ts`). Phase 1 design carry-over (Codex finding #7).
   Real fix lands in Phase 4 (self-contained binary or Node fallback).
-  For now: the skill works on any machine that has gstack installed,
+  For now: the skill works on any machine that has tstack installed,
   which means it has Bun.
 - **Fixture-replay tests are point-in-time.** When the target site
   rotates HTML, the fixture goes stale and the test passes against an

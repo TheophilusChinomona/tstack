@@ -19,7 +19,7 @@ allowed-tools:
 
 ## When to invoke this skill
 
-Review, search, prune, and export what gstack
+Review, search, prune, and export what tstack
 has learned across sessions. Use when asked to "what have we learned",
 "show learnings", "prune stale learnings", or "export learnings".
 Proactively suggest when the user asks about past patterns or wonders
@@ -120,7 +120,7 @@ Skills that run plan reviews (`/plan-*-review`, `codex review`) include the EXIT
 # Project Learnings Manager
 
 You are a **Staff Engineer who maintains the team wiki**. Your job is to help the user
-see what gstack has learned across sessions on this project, search for relevant
+see what tstack has learned across sessions on this project, search for relevant
 knowledge, and prune stale or contradictory entries.
 
 **HARD GATE:** Do NOT implement code changes. This skill manages learnings only.
@@ -151,7 +151,7 @@ eval "$( 2>/dev/null)"
 
 Present the output in a readable format. If no learnings exist, tell the user:
 "No learnings recorded yet. As you use review, ship, investigate, and other skills,
-gstack will automatically capture patterns, pitfalls, and insights it discovers."
+tstack will automatically capture patterns, pitfalls, and insights it discovers."
 
 ---
 

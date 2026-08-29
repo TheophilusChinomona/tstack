@@ -227,7 +227,7 @@ Read `.claude/skillsreview/TODOS-format.md` for the canonical format reference.
 **1. Check if TODOS.md exists** in the repository root.
 
 **If TODOS.md does not exist:** Use AskUserQuestion:
-- Message: "GStack recommends maintaining a TODOS.md organized by skill/component, then priority (P0 at top through P4, then Completed at bottom). See TODOS-format.md for the full format. Would you like to create one?"
+- Message: "TStack recommends maintaining a TODOS.md organized by skill/component, then priority (P0 at top through P4, then Completed at bottom). See TODOS-format.md for the full format. Would you like to create one?"
 - Options: A) Create it now, B) Skip for now
 - If A: Create `TODOS.md` with a skeleton (# TODOS heading + ## Completed section). Continue to step 3.
 - If B: Skip the rest of Step 14. Continue to Step 15.
@@ -293,7 +293,7 @@ If `WIP_COUNT` > 0, collect the WIP context first so it survives the squash:
 ```bash
 # Export [context] blocks from all WIP commits on this branch.
 # This file becomes input to the CHANGELOG entry and may inform PR body context.
-mkdir -p "$(git rev-parse --show-toplevel)/.gstack"
+mkdir -p "$(git rev-parse --show-toplevel)/.tstack"
 git log <base>..HEAD --grep="^WIP:" --format="%H%n%B%n---END---" > \
   "$(git rev-parse --show-toplevel)/./docs/wip-context-before-squash.md" 2>/dev/null || true
 ```
@@ -428,7 +428,7 @@ Claiming work is complete without verification is dishonesty, not efficiency.
 _REDACT_PREPUSH=$( get redact_prepush_hook 2>/dev/null || echo "false")
 _HOOK_PATH=$(git rev-parse --git-path hooks/pre-push 2>/dev/null || echo "")
 _HOOK_INSTALLED="no"
-[ -n "$_HOOK_PATH" ] && [ -f "$_HOOK_PATH" ] && grep -q "gstack-redact" "$_HOOK_PATH" 2>/dev/null && _HOOK_INSTALLED="yes"
+[ -n "$_HOOK_PATH" ] && [ -f "$_HOOK_PATH" ] && grep -q "tstack-redact" "$_HOOK_PATH" 2>/dev/null && _HOOK_INSTALLED="yes"
 # Custom hooks dirs (core.hooksPath — e.g. husky's COMMITTED .husky/) must
 # never get a silent install: the chaining installer would rename the team's
 # committed hook and write a machine-local wrapper into the working tree.
@@ -461,11 +461,11 @@ Branch on the echoed values:
    If `HOOKS_IN_GIT_DIR: no` (husky or another committed hooks dir), do NOT
    install silently — print one line: "redact pre-push guard not installed:
    this repo uses a custom core.hooksPath; run
-   `gstack-redact install-prepush-hook` manually if you want it chained."
+   `tstack-redact install-prepush-hook` manually if you want it chained."
 2. **`REDACT_PREPUSH` not true AND `PREPUSH_PROMPTED: no`** — one-time
    offer (fires once EVER, machine-wide). AskUserQuestion:
 
-   > gstack can install a per-repo git pre-push hook that blocks pushes
+   > tstack can install a per-repo git pre-push hook that blocks pushes
    > containing credentials (API keys, tokens, private keys). It's a
    > guardrail, not enforcement — `TSTACK_REDACT_PREPUSH=skip` bypasses it.
    > Install it for repos you ship from?
@@ -550,7 +550,7 @@ _NUDGE_MARKER="./docs/.plan-tune-nudge-shown"
 _QT=$( get question_tuning 2>/dev/null || echo "false")
 if [ ! -f "$_NUDGE_MARKER" ] && [ "$_QT" = "false" ]; then
   echo ""
-  echo "gstack can learn from your AskUserQuestion answers. Run plan-tune to opt in"
+  echo "tstack can learn from your AskUserQuestion answers. Run plan-tune to opt in"
   echo "— it captures which prompts you find valuable vs noisy and (with hooks installed)"
   echo "auto-decides your never-ask preferences."
   touch "$_NUDGE_MARKER"
