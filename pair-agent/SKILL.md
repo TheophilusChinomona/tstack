@@ -147,7 +147,7 @@ The skill will tell you if one is needed and how to set it up.
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -445,20 +445,20 @@ generate a new setup key.
 
 OpenClaw agents use the `exec` tool instead of `Bash`. The instruction block uses
 `exec curl` syntax which OpenClaw understands natively. When using `--local openclaw`,
-credentials are written to `~/.openclaw/skills/gstackbrowse-remote.json`.
+credentials are written to `~/.openclaw/skills/browse-remote.json`.
 
 
 ### Codex
 
 Codex agents can execute shell commands via `codex exec`. The instruction block's
 curl commands work directly. When using `--local codex`, credentials are written
-to `~/.codex/skills/gstackbrowse-remote.json`.
+to `~/.codex/skills/browse-remote.json`.
 
 ### Cursor
 
 Cursor's AI can run terminal commands. The instruction block works as-is.
 When using `--local cursor`, credentials are written to
-`~/.cursor/skills/gstackbrowse-remote.json`.
+`~/.cursor/skills/browse-remote.json`.
 
 ## Revoking access
 

@@ -280,7 +280,7 @@ $B text
 Verify the page has content (not blank, not a generic error page).
 
 ```bash
-$B snapshot -i -a -o ".gstack/deploy-reports/post-deploy.png"
+$B snapshot -i -a -o "./docs/deploy-reports/post-deploy.png"
 ```
 
 Take an annotated screenshot as evidence.
@@ -329,7 +329,7 @@ After a successful revert: Tell the user "Revert pushed to {base}. The deploy sh
 Create the deploy report directory:
 
 ```bash
-mkdir -p .gstack/deploy-reports
+mkdir -p ./docs/deploy-reports
 ```
 
 Produce and display the ASCII summary:
@@ -369,7 +369,7 @@ Verification: <HEALTHY / DEGRADED / SKIPPED / REVERTED>
 VERDICT: <DEPLOYED AND VERIFIED / DEPLOYED (UNVERIFIED) / STAGING VERIFIED / REVERTED>
 ```
 
-Save report to `.gstack/deploy-reports/{date}-pr{number}-deploy.md`.
+Save report to `./docs/deploy-reports/{date}-pr{number}-deploy.md`.
 
 Log to the review dashboard:
 

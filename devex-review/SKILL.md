@@ -184,7 +184,7 @@ branch name wherever the instructions say "the base branch" or `<default>`.
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -287,7 +287,7 @@ Internalize these; don't enumerate them.
 ## Hall of Fame Reference
 
 During each review pass, load the relevant section from:
-\`~/.claude/skills/gstackplan-devex-review/dx-hall-of-fame.md\`
+\`./plan-devex-review/dx-hall-of-fame.md\`
 
 Read ONLY the section for the current pass (e.g., "## Pass 1" for Getting Started).
 Do NOT read the entire file at once. This keeps context focused.

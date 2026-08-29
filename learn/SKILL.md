@@ -233,7 +233,7 @@ Show summary statistics about the project's learnings.
 ```bash
 eval "$( 2>/dev/null)"
 eval "$()"
-LEARN_FILE="$GSTACK_STATE_ROOT/projects/$SLUGlearnings.jsonl"
+LEARN_FILE="$TSTACK_STATE_ROOT/projects/$SLUGlearnings.jsonl"
 if [ -f "$LEARN_FILE" ]; then
   TOTAL=$(wc -l < "$LEARN_FILE" | tr -d ' ')
   echo "TOTAL: $TOTAL entries"

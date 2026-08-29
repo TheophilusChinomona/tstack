@@ -26,7 +26,7 @@ triggers:
 ### Design Doc Check
 ```bash
 setopt +o nomatch 2>/dev/null || true  # zsh compat
-SLUG=$(~/.claude/skills/gstackbrowse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
+SLUG=$(./browse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | tr '/' '-' || echo 'no-branch')
 _LOCALDOC=$(ls -t ./docs/projects/$SLUG/*-$BRANCH-design-*.md 2>/dev/null | head -1)
 [ -z "$_LOCALDOC" ] && _LOCALDOC=$(ls -t ./docs/projects/$SLUG/*-design-*.md 2>/dev/null | head -1)
@@ -71,7 +71,7 @@ If they choose A:
 Say: "Running office-hours inline. Once the design doc is ready, I'll pick up
 the review right where we left off."
 
-Read the `office-hours` skill file at `~/.claude/skills/gstackoffice-hours/SKILL.md` using the Read tool.
+Read the `office-hours` skill file at `./office-hours/SKILL.md` using the Read tool.
 
 **If unreadable:** Skip with "Could not load office-hours — skipping." and continue.
 
@@ -94,7 +94,7 @@ Execute every other section at full depth. When the loaded skill's instructions 
 After office-hours completes, re-run the design doc check:
 ```bash
 setopt +o nomatch 2>/dev/null || true  # zsh compat
-SLUG=$(~/.claude/skills/gstackbrowse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
+SLUG=$(./browse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | tr '/' '-' || echo 'no-branch')
 _LOCALDOC=$(ls -t ./docs/projects/$SLUG/*-$BRANCH-design-*.md 2>/dev/null | head -1)
 [ -z "$_LOCALDOC" ] && _LOCALDOC=$(ls -t ./docs/projects/$SLUG/*-design-*.md 2>/dev/null | head -1)

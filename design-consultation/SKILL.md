@@ -177,7 +177,7 @@ command -v codex >/dev/null 2>&1 && echo "CODEX_AVAILABLE" || echo "CODEX_NOT_AV
 
 1. **Codex design voice** (via Bash):
 ```bash
-TMPERR_DESIGN=$(mktemp /tmpcodex-design-XXXXXXXX)
+TMPERR_DESIGN=$(mktemp /tmp/codex-design-XXXXXXXX)
 _REPO_ROOT=$(git rev-parse --show-toplevel) || { echo "ERROR: not in a git repo" >&2; exit 1; }
 codex exec "Given this product context, propose a complete design direction:
 - Visual thesis: one sentence describing mood, material, and energy

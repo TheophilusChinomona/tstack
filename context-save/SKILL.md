@@ -209,7 +209,7 @@ allowlist: only `a-z 0-9 - .` survive.
 ```bash
 eval "$( 2>/dev/null)" && mkdir -p ./docs/projects/$SLUG
 eval "$()"
-CHECKPOINT_DIR="$GSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
+CHECKPOINT_DIR="$TSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
 mkdir -p "$CHECKPOINT_DIR"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 # Bash-side title sanitize. Pass the raw title as $1 when running this block.
@@ -292,7 +292,7 @@ Restore later with context-restore.
 ```bash
 eval "$( 2>/dev/null)" && mkdir -p ./docs/projects/$SLUG
 eval "$()"
-CHECKPOINT_DIR="$GSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
+CHECKPOINT_DIR="$TSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
 if [ -d "$CHECKPOINT_DIR" ]; then
   echo "CHECKPOINT_DIR=$CHECKPOINT_DIR"
   # Use find + sort instead of ls -1t: filename YYYYMMDD-HHMMSS prefix is the

@@ -237,7 +237,7 @@ command -v codex >/dev/null 2>&1 && echo "CODEX_AVAILABLE" || echo "CODEX_NOT_AV
 
 1. **Codex design voice** (via Bash):
 ```bash
-TMPERR_DESIGN=$(mktemp /tmpcodex-design-XXXXXXXX)
+TMPERR_DESIGN=$(mktemp /tmp/codex-design-XXXXXXXX)
 _REPO_ROOT=$(git rev-parse --show-toplevel) || { echo "ERROR: not in a git repo" >&2; exit 1; }
 codex exec "Read the plan file at [plan-file-path]. Evaluate this plan's UI/UX design against these criteria.
 
@@ -346,7 +346,7 @@ If `DESIGN_READY` was printed during setup AND a dimension rates below 7/10,
 offer to generate a visual mockup showing what the improved version would look like:
 
 ```bash
-$D generate --brief "<description of what 10/10 looks like for this dimension>" --output /tmp/gstack-ideal-<dimension>.png
+$D generate --brief "<description of what 10/10 looks like for this dimension>" --output /tmp/ideal-<dimension>.png
 ```
 
 Show the mockup to the user via the Read tool. This makes the gap between

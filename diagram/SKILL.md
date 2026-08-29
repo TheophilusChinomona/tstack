@@ -104,7 +104,7 @@ Write mermaid for the user's request. Rules:
   and say why.
 
 Decide the output directory: `.diagrams/` when the cwd is a git repo
-(artifacts the user can commit), else `/tmp/gstack-diagrams/`. Derive
+(artifacts the user can commit), else `/tmp/diagrams/`. Derive
 `<slug>` from the diagram's subject (kebab-case, ≤40 chars).
 
 ## Step 2 — Stage the render bundle (once per session)
@@ -114,13 +114,13 @@ so concurrent sessions and mixed gstack versions never clobber each other:
 
 ```bash
 BUNDLE=""
-for c in "$HOME/.claude/skills/gstack/libdiagram-render/distdiagram-render.html" \
+for c in "./libdiagram-render/distdiagram-render.html" \
          "$(git rev-parse --show-toplevel 2>/dev/null)/libdiagram-render/distdiagram-render.html"; do
   [ -f "$c" ] && BUNDLE="$c" && break
 done
-[ -z "$BUNDLE" ] && echo "BUNDLE_MISSING — run: cd ~/.claude/skills/gstack && bun run build:diagram-render" && exit 1
+[ -z "$BUNDLE" ] && echo "BUNDLE_MISSING — run: cd ./ && bun run build:diagram-render" && exit 1
 SHA=$(shasum -a 256 "$BUNDLE" | cut -c1-16)
-STAGED="/tmp/gstack-diagram-render-$SHA.html"
+STAGED="/tmp/diagram-render-$SHA.html"
 [ -f "$STAGED" ] && shasum -a 256 "$STAGED" | grep -q "^$SHA" || { cp "$BUNDLE" "$STAGED.$$" && mv "$STAGED.$$" "$STAGED"; }
 TAB=$($B newtab --json | sed -n 's/.*"tabId":\s*\([0-9]*\).*/\1/p')
 [ -z "$TAB" ] && echo "TAB_OPEN_FAILED — daemon busy? check browse status" && exit 1

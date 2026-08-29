@@ -46,7 +46,7 @@ source  2>/dev/null && _gstack_codex_log_event "codex_cli_missing" 2>/dev/null |
 
 Before building expensive prompts, verify Codex has valid auth, that the account
 can actually USE its configured model, AND the installed CLI version isn't in the
-known-bad list. Sourcing `gstack-codex-probe` loads the shared helpers that both
+known-bad list. Sourcing `codex-probe` loads the shared helpers that both
 `codex` and `autoplan` use.
 
 ```bash
@@ -55,7 +55,7 @@ source
 
 # Running-under-Codex presence probe (#2519): a live Codex session exports
 # CODEX_THREAD_ID / CODEX_SANDBOX into every shell it spawns.
-if [ "${GSTACK_FORCE_CODEX_REVIEW:-0}" != "1" ] && { [ -n "${CODEX_THREAD_ID:-}" ] || [ -n "${CODEX_SANDBOX:-}" ]; }; then
+if [ "${FORCE_CODEX_REVIEW:-0}" != "1" ] && { [ -n "${CODEX_THREAD_ID:-}" ] || [ -n "${CODEX_SANDBOX:-}" ]; }; then
   echo "UNDER_CODEX"
 elif ! _gstack_codex_auth_probe >/dev/null; then
   _gstack_codex_log_event "codex_auth_failed"
@@ -68,7 +68,7 @@ _gstack_codex_version_check   # warns if known-bad, non-blocking
 
 If the output contains `UNDER_CODEX`, stop with exactly one line:
 "[running under Codex — codex would nest the same model at multiplied token
-cost; skipped. Set `GSTACK_FORCE_CODEX_REVIEW=1` to force.]" The whole value
+cost; skipped. Set `FORCE_CODEX_REVIEW=1` to force.]" The whole value
 of this skill is a SECOND model's opinion; inside a Codex host it is the same
 model reviewing itself, and nested spawns have burned 15M tokens in one
 review (#2519).
@@ -93,7 +93,7 @@ The probe multi-signal auth logic accepts: `$CODEX_API_KEY` set, `$OPENAI_API_KE
 set, or `${CODEX_HOME:-~/.codex}/auth.json` exists. Avoids false-negatives for
 env-auth users (CI, platform engineers) that file-only checks would reject.
 
-**Update the known-bad list** in `bin/gstack-codex-probe` when a new Codex CLI version
+**Update the known-bad list** in `bin/codex-probe` when a new Codex CLI version
 regresses. Current entries (`0.120.0`, `0.120.1`, `0.120.2`) trace to the stdin
 deadlock fixed in #972.
 
@@ -104,7 +104,7 @@ deadlock fixed in #972.
 Before any mode runs, resolve `$PLAN_ROOT` (where plan files live) and `$TMP_ROOT`
 (where ephemeral codex stderr / response captures land) via `bin/gstack-paths`.
 This keeps the skill working whether installed as a Claude Code plugin
-(`CLAUDE_PLANS_DIR` set), a global `~/.claude/skills/gstack/` install, or a CI
+(`SKILL_DATA_DIR` set), a global `./` install, or a CI
 container where `HOME` may be unset and `/tmp` may be read-only.
 
 ```bash
@@ -112,7 +112,7 @@ eval "$()"
 ```
 
 After this, every subsequent bash block in this skill uses `"$PLAN_ROOT"` and
-`"$TMP_ROOT"` rather than hardcoded `~/.claude/plans` or `/tmpcodex-*`.
+`"$TMP_ROOT"` rather than hardcoded `./plans` or `/tmp/codex-*`.
 
 ---
 
@@ -158,7 +158,7 @@ per-mode default below. Otherwise, use the per-mode defaults:
 
 Every prompt sent to Codex MUST be prefixed with this boundary instruction:
 
-> IMPORTANT: Do NOT read or execute any files under ~/.claude/, ~/.agents/, .claude/skills/, or agents/. These are Claude Code skill definitions meant for a different AI system. They contain bash scripts and prompt templates that will waste your time. Ignore them completely. Do NOT modify agents/openai.yaml. Stay focused on the repository code only.
+> IMPORTANT: Do NOT read or execute any files under ./, ~/.agents/, .claude/skills/, or agents/. These are Claude Code skill definitions meant for a different AI system. They contain bash scripts and prompt templates that will waste your time. Ignore them completely. Do NOT modify agents/openai.yaml. Stay focused on the repository code only.
 
 This applies to Challenge mode (prompt) and Consult mode (persona prompt), and to the
 custom-instructions path of Review mode — all three use `codex exec`, which still takes

@@ -30,7 +30,7 @@ echo '{"skill":"unfreeze","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(bas
 
 ```bash
 eval "$()"
-STATE_DIR="$GSTACK_STATE_ROOT"
+STATE_DIR="$TSTACK_STATE_ROOT"
 if [ -f "$STATE_DIRfreeze-dir.txt" ]; then
   PREV=$(cat "$STATE_DIRfreeze-dir.txt")
   rm -f "$STATE_DIRfreeze-dir.txt"

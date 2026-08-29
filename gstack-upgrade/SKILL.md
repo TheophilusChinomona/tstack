@@ -34,7 +34,7 @@ This section is referenced by all skill preambles when they detect `UPGRADE_AVAI
 First, check if auto-upgrade is enabled:
 ```bash
 _AUTO=""
-[ "${GSTACK_AUTO_UPGRADE:-}" = "1" ] && _AUTO="true"
+[ "${TSTACK_AUTO_UPGRADE:-}" = "1" ] && _AUTO="true"
 [ -z "$_AUTO" ] && _AUTO=$( get auto_upgrade 2>/dev/null || true)
 echo "AUTO_UPGRADE=$_AUTO"
 ```
@@ -83,24 +83,24 @@ Continue with the current skill.
 ### Step 2: Detect install type
 
 ```bash
-if [ -d "$HOME/.claude/skills/gstack/.git" ]; then
+if [ -d "./.git" ]; then
   INSTALL_TYPE="global-git"
-  INSTALL_DIR="$HOME/.claude/skills/gstack"
-elif [ -d "./docs/repos/gstack/.git" ]; then
+  INSTALL_DIR="./"
+elif [ -d "./docs/repos/.git" ]; then
   INSTALL_TYPE="global-git"
   INSTALL_DIR="./docs/repos/gstack"
-elif [ -d ".claude/skills/gstack/.git" ]; then
+elif [ -d ".claude/skills/.git" ]; then
   INSTALL_TYPE="local-git"
   INSTALL_DIR=".claude/skills/gstack"
-elif [ -d ".agents/skills/gstack/.git" ]; then
+elif [ -d ".agents/skills/.git" ]; then
   INSTALL_TYPE="local-git"
   INSTALL_DIR=".agents/skills/gstack"
 elif [ -d ".claude/skills/gstack" ]; then
   INSTALL_TYPE="vendored"
   INSTALL_DIR=".claude/skills/gstack"
-elif [ -d "$HOME/.claude/skills/gstack" ]; then
+elif [ -d "./" ]; then
   INSTALL_TYPE="vendored-global"
-  INSTALL_DIR="$HOME/.claude/skills/gstack"
+  INSTALL_DIR="./"
 else
   echo "ERROR: gstack not found"
   exit 1
@@ -198,9 +198,9 @@ echo "TEAM_MODE=$_TEAM_MODE"
 
 ```bash
 cd "$_ROOT"
-git rm -r --cached .claude/skills/gstack/ 2>/dev/null || true
-if ! grep -qF '.claude/skills/gstack/' .gitignore 2>/dev/null; then
-  echo '.claude/skills/gstack/' >> .gitignore
+git rm -r --cached .claude/skills/ 2>/dev/null || true
+if ! grep -qF '.claude/skills/' .gitignore 2>/dev/null; then
+  echo '.claude/skills/' >> .gitignore
 fi
 rm -rf "$LOCAL_GSTACK"
 ```
@@ -214,7 +214,7 @@ rm -rf "$LOCAL_GSTACK/.git"
 cd "$LOCAL_GSTACK" && ./setup
 rm -rf "$LOCAL_GSTACK.bak"
 ```
-Tell user: "Also updated vendored copy at `$LOCAL_GSTACK` — commit `.claude/skills/gstack/` when you're ready."
+Tell user: "Also updated vendored copy at `$LOCAL_GSTACK` — commit `.claude/skills/` when you're ready."
 
 If `./setup` fails, restore from backup and warn the user:
 ```bash
@@ -239,10 +239,10 @@ if [ -d "$MIGRATIONS_DIR" ]; then
     # (simple string compare works for dotted versions with same segment count)
     if [ "$OLD_VERSION" != "unknown" ] && [ "$(printf '%s\n%s' "$OLD_VERSION" "$m_ver" | sort -V | head -1)" = "$OLD_VERSION" ] && [ "$OLD_VERSION" != "$m_ver" ]; then
       echo "Running migration $m_ver..."
-      # GSTACK_INSTALL_DIR: migrations that clean the INSTALL (not just
-      # ./docs state) default to ~/.claude/skills/gstack when unset —
+      # TSTACK_INSTALL_DIR: migrations that clean the INSTALL (not just
+      # ./docs state) default to ./ when unset —
       # a repo-local install would silently no-op without this.
-      GSTACK_INSTALL_DIR="$INSTALL_DIR" bash "$migration" || echo "  Warning: migration $m_ver had errors (non-fatal)"
+      TSTACK_INSTALL_DIR="$INSTALL_DIR" bash "$migration" || echo "  Warning: migration $m_ver had errors (non-fatal)"
     fi
   done
 fi
@@ -262,7 +262,7 @@ the install directory detected in Step 2.
 ```bash
 INSTALL_DIR_PLACEHOLDER="<install dir from Step 2>"
 NEW_HASH=$(cat "$INSTALL_DIR_PLACEHOLDERbrowse/dist/.version" 2>/dev/null || echo "")
-_STATE_FILE="${BROWSE_STATE_FILE:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.gstackbrowse.json}"
+_STATE_FILE="${BROWSE_STATE_FILE:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.browse.json}"
 if [ -z "$NEW_HASH" ] || [ ! -f "$_STATE_FILE" ]; then
   echo "DAEMON_CHECK=none (no state file or no fresh build hash)"
 else
@@ -334,7 +334,7 @@ When invoked directly as `gstack-upgrade` (not from a preamble):
 1. Force a fresh update check (bypass cache):
 ```bash
  --force 2>/dev/null || \
-.claude/skills/gstack/bin/gstack-update-check --force 2>/dev/null || true
+.claude/skills/bin/gstack-update-check --force 2>/dev/null || true
 ```
 Use the output to determine if an upgrade is available.
 
@@ -355,6 +355,6 @@ LOCAL_VER=$(cat "$LOCAL_GSTACK/VERSION" 2>/dev/null || echo "unknown")
 echo "PRIMARY=$PRIMARY_VER LOCAL=$LOCAL_VER"
 ```
 
-**If versions differ:** follow the Step 4.5 sync bash block above to update the local copy from the primary. Tell user: "Global v{PRIMARY_VER} is up to date. Updated local vendored copy from v{LOCAL_VER} → v{PRIMARY_VER}. Commit `.claude/skills/gstack/` when you're ready."
+**If versions differ:** follow the Step 4.5 sync bash block above to update the local copy from the primary. Tell user: "Global v{PRIMARY_VER} is up to date. Updated local vendored copy from v{LOCAL_VER} → v{PRIMARY_VER}. Commit `.claude/skills/` when you're ready."
 
 **If versions match:** tell the user "You're on the latest version (v{PRIMARY_VER}). Global and local vendored copy are both up to date."

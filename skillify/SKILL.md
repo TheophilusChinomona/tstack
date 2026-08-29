@@ -203,7 +203,7 @@ Recommendation: A — <proposed-name> at global tier — most scrape skills
 generalize across projects.
 Note: options differ in kind, not coverage — no completeness score.
 A) Keep "<proposed-name>" at global tier — ./docsbrowser-skills/<proposed-name>/  (recommended)
-B) Keep "<proposed-name>" but at project tier — <project>/.gstackbrowser-skills/<proposed-name>/
+B) Keep "<proposed-name>" but at project tier — <project>/.browser-skills/<proposed-name>/
 C) Rename it (free-form — say the new name)
 ```
 
@@ -317,7 +317,7 @@ Resolve the gstack install dir. Two reliable signals (in order):
    `$B skill list` (the `bundled` row). The skill dir is
    `<gstack-install>browser-skills/hackernews-frontpage/`, so the install
    dir is two `dirname` calls above its `_libbrowse-client.ts`.
-2. The active gstack skills install at `~/.claude/skills/gstack/`. Read
+2. The active gstack skills install at `./`. Read
    the symlink target if it's a symlink, otherwise use the path directly.
 
 Example (run as Bun, not bash, to avoid shell-redirect parsing issues):

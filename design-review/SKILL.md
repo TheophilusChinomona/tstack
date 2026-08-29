@@ -194,7 +194,7 @@ After the user chooses, execute their choice (commit or stash), then continue wi
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -258,7 +258,7 @@ git ls-files | grep -cE '(^|/)(tests?|spec|__tests__)/|(^|/)tests?\.py$|(^|/)tes
 # Rust keeps unit tests inside src/, so file names alone miss them
 [ -f Cargo.toml ] && git grep -lF '#[test]' -- 'src' >/dev/null 2>&1 && echo "TESTS:rust in-source"
 # Check opt-out marker
-[ -f .gstack/no-test-bootstrap ] && echo "BOOTSTRAP_DECLINED"
+[ -f ./docs/no-test-bootstrap ] && echo "BOOTSTRAP_DECLINED"
 ```
 
 Map the markers to the command you will OFFER — never to one you run on a guess:
@@ -289,7 +289,7 @@ Absent config files and absent `tests/` directories are NOT evidence of "no test
 "I couldn't detect your project's language. What runtime are you using?"
 Options: A) Node.js/TypeScript B) Ruby/Rails C) Python D) Go E) Rust F) PHP G) Elixir H) This project doesn't need tests.
 If the runtime you need isn't listed, offer "Other" and take the runtime plus the test command as free text.
-If user picks H → write `.gstack/no-test-bootstrap` and continue without tests.
+If user picks H → write `./docs/no-test-bootstrap` and continue without tests.
 
 **If an ecosystem matched but there is no existing-test evidence at all — bootstrap:**
 
@@ -323,7 +323,7 @@ B) [Alternative] — [rationale]. Includes: [packages]
 C) Skip — don't set up testing right now
 RECOMMENDATION: Choose A because [reason based on project context]"
 
-If user picks C → write `.gstack/no-test-bootstrap`. Tell user: "If you change your mind later, delete `.gstack/no-test-bootstrap` and re-run." Continue without tests.
+If user picks C → write `./docs/no-test-bootstrap`. Tell user: "If you change your mind later, delete `./docs/no-test-bootstrap` and re-run." Continue without tests.
 
 If multiple runtimes detected (monorepo) → ask which runtime to set up first, with option to do both sequentially.
 
@@ -418,8 +418,8 @@ Only commit if there are changes. Stage all bootstrap files (config, test direct
 ```bash
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 D=""
-[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/gstack/design/dist/design" ] && D="$_ROOT/.claude/skills/gstack/design/dist/design"
-[ -z "$D" ] && D="$HOME/.claude/skills/gstack/design/dist/design"
+[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/design/dist/design" ] && D="$_ROOT/.claude/skills/design/dist/design"
+[ -z "$D" ] && D="./design/dist/design"
 if [ -x "$D" ]; then
   echo "DESIGN_READY: $D"
 else
@@ -427,7 +427,7 @@ else
 fi
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "BROWSE_READY: $B"
 else
@@ -894,7 +894,7 @@ Compare screenshots and observations across pages for:
 
 ### Output Locations
 
-**Local:** `.gstack/design-reports/design-audit-{domain}-{YYYY-MM-DD}.md`
+**Local:** `./docs/design-reports/design-audit-{domain}-{YYYY-MM-DD}.md`
 
 **Project-scoped:**
 ```bash
@@ -1091,7 +1091,7 @@ command -v codex >/dev/null 2>&1 && echo "CODEX_AVAILABLE" || echo "CODEX_NOT_AV
 
 1. **Codex design voice** (via Bash):
 ```bash
-TMPERR_DESIGN=$(mktemp /tmpcodex-design-XXXXXXXX)
+TMPERR_DESIGN=$(mktemp /tmp/codex-design-XXXXXXXX)
 _REPO_ROOT=$(git rev-parse --show-toplevel) || { echo "ERROR: not in a git repo" >&2; exit 1; }
 codex exec "Review the frontend source code in this repo. Evaluate against these design hard rules:
 - Spacing: systematic (design tokens / CSS variables) or magic numbers?

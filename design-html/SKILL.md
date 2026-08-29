@@ -30,8 +30,8 @@ allowed-tools:
 ```bash
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 D=""
-[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/gstack/design/dist/design" ] && D="$_ROOT/.claude/skills/gstack/design/dist/design"
-[ -z "$D" ] && D="$HOME/.claude/skills/gstack/design/dist/design"
+[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/design/dist/design" ] && D="$_ROOT/.claude/skills/design/dist/design"
+[ -z "$D" ] && D="./design/dist/design"
 if [ -x "$D" ]; then
   echo "DESIGN_READY: $D"
 else
@@ -39,7 +39,7 @@ else
 fi
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "BROWSE_READY: $B"
 else
@@ -76,7 +76,7 @@ data, not project files. They persist across branches, conversations, and worksp
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -286,8 +286,8 @@ For **vanilla HTML output**, check for the vendored Pretext bundle:
 ```bash
 _PRETEXT_VENDOR=""
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-[ -n "$_ROOT" ] && [ -f "$_ROOT/.claude/skills/gstackdesign-html/vendor/pretext.js" ] && _PRETEXT_VENDOR="$_ROOT/.claude/skills/gstackdesign-html/vendor/pretext.js"
-[ -z "$_PRETEXT_VENDOR" ] && [ -f ~/.claude/skills/gstackdesign-html/vendor/pretext.js ] && _PRETEXT_VENDOR=~/.claude/skills/gstackdesign-html/vendor/pretext.js
+[ -n "$_ROOT" ] && [ -f "$_ROOT/.claude/skills/design-html/vendor/pretext.js" ] && _PRETEXT_VENDOR="$_ROOT/.claude/skills/design-html/vendor/pretext.js"
+[ -z "$_PRETEXT_VENDOR" ] && [ -f ./design-html/vendor/pretext.js ] && _PRETEXT_VENDOR=./design-html/vendor/pretext.js
 [ -n "$_PRETEXT_VENDOR" ] && echo "VENDOR: $_PRETEXT_VENDOR" || echo "VENDOR_MISSING"
 ```
 
@@ -379,9 +379,9 @@ If `$B` is available (browse binary), take verification screenshots at 3 viewpor
 
 ```bash
 $B goto "file://<path-to-finalized.html>"
-$B screenshot /tmp/gstack-verify-mobile.png --width 375
-$B screenshot /tmp/gstack-verify-tablet.png --width 768
-$B screenshot /tmp/gstack-verify-desktop.png --width 1440
+$B screenshot /tmp/verify-mobile.png --width 375
+$B screenshot /tmp/verify-tablet.png --width 768
+$B screenshot /tmp/verify-desktop.png --width 1440
 ```
 
 Show all three screenshots inline using the Read tool. Check for:

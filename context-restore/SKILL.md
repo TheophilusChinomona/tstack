@@ -160,7 +160,7 @@ Parse the user's input:
 ```bash
 eval "$( 2>/dev/null)" && mkdir -p ./docs/projects/$SLUG
 eval "$()"
-CHECKPOINT_DIR="$GSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
+CHECKPOINT_DIR="$TSTACK_STATE_ROOT/projects/$SLUG/checkpoints"
 if [ ! -d "$CHECKPOINT_DIR" ]; then
   echo "NO_CHECKPOINTS"
 else

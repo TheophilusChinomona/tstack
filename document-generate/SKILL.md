@@ -213,7 +213,7 @@ is directly proportional to how well you understand the code.
 1. **Map the project structure:**
 
 ```bash
-find . -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.gstack/*" -not -path "./dist/*" -not -path "./build/*" -not -path "./.next/*" | head -200
+find . -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "././docs/*" -not -path "./dist/*" -not -path "./build/*" -not -path "./.next/*" | head -200
 ```
 
 2. **Read the entry points.** Identify and read:

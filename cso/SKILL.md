@@ -337,7 +337,7 @@ For each finding:
 5. **Audit exposure window** — when committed? When removed? Was repo public?
 6. **Check for abuse** — review provider's audit logs
 
-**Trend Tracking:** If prior reports exist in `.gstack/security-reports/`:
+**Trend Tracking:** If prior reports exist in `./docs/security-reports/`:
 ```
 SECURITY POSTURE TREND
 ══════════════════════
@@ -365,10 +365,10 @@ Match findings across reports using the `fingerprint` field (sha256 of category 
 ### Phase 14: Save Report
 
 ```bash
-mkdir -p .gstack/security-reports
+mkdir -p ./docs/security-reports
 ```
 
-Write findings to `.gstack/security-reports/{date}-{HHMMSS}.json` using this schema:
+Write findings to `./docs/security-reports/{date}-{HHMMSS}.json` using this schema:
 
 ```json
 {
@@ -421,7 +421,7 @@ Write findings to `.gstack/security-reports/{date}-{HHMMSS}.json` using this sch
 }
 ```
 
-If `.gstack/` is not in `.gitignore`, note it in findings — security reports should stay local.
+If `./docs/` is not in `.gitignore`, note it in findings — security reports should stay local.
 
 ## Capture Learnings
 

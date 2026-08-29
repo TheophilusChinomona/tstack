@@ -23,12 +23,12 @@ hooks:
     - matcher: "Edit"
       hooks:
         - type: command
-          command: 'bash -c ''S="$HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"; [ -x "$S" ] && exec bash "$S"; exit 0'''
+          command: 'bash -c ''S="./freeze/bin/check-freeze.sh"; [ -x "$S" ] && exec bash "$S"; exit 0'''
           statusMessage: "Checking debug scope boundary..."
     - matcher: "Write"
       hooks:
         - type: command
-          command: 'bash -c ''S="$HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"; [ -x "$S" ] && exec bash "$S"; exit 0'''
+          command: 'bash -c ''S="./freeze/bin/check-freeze.sh"; [ -x "$S" ] && exec bash "$S"; exit 0'''
           statusMessage: "Checking debug scope boundary..."
     - id: project-learnings
       kind: filesystem
@@ -238,7 +238,7 @@ After forming your root cause hypothesis, lock edits to the affected module to p
 # $HOME-anchored like the carefulfreeze frontmatter hooks (#1871): frontmatter
 # hooks and early skill bash run before any runtime var like CLAUDE_SKILL_DIR
 # exists, so a ${CLAUDE_SKILL_DIR}-relative path silently never resolves (#2469).
-_FREEZE_SCRIPT="$HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"
+_FREEZE_SCRIPT="./freeze/bin/check-freeze.sh"
 [ -x "$_FREEZE_SCRIPT" ] && echo "FREEZE_AVAILABLE" || echo "FREEZE_UNAVAILABLE"
 ```
 
@@ -246,7 +246,7 @@ _FREEZE_SCRIPT="$HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"
 
 ```bash
 eval "$()"
-STATE_DIR="$GSTACK_STATE_ROOT"
+STATE_DIR="$TSTACK_STATE_ROOT"
 mkdir -p "$STATE_DIR"
 echo "<detected-directory>/" > "$STATE_DIRfreeze-dir.txt"
 echo "Debug scope locked to: <detected-directory>/"

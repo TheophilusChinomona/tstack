@@ -178,9 +178,9 @@ git fetch origin <base> && git merge origin/<base> --no-edit
 
 ## Step 12: Version bump (auto-decide)
 
-The deterministic version-state logic is the tested **`gstack-version-bump`** CLI
+The deterministic version-state logic is the tested **`version-bump`** CLI
 (classify / write / repair). The bump-LEVEL decision and queue-collision handling
-stay agent judgment; the slot pick stays `gstack-next-version`.
+stay agent judgment; the slot pick stays `next-version`.
 
 1. **Classify state** — pure reader, never writes:
    ```bash
@@ -189,7 +189,7 @@ stay agent judgment; the slot pick stays `gstack-next-version`.
    Read the JSON `state` and dispatch:
    - **FRESH** → do the bump (steps 2-4).
    - **ALREADY_BUMPED** → skip the bump, but run the queue-drift check (step 3) with the reported `currentVersion`. If the queue moved (next free version differs), **AskUserQuestion**: rebump to the new version (rewrites CHANGELOG header + PR title) or keep current (CI version-gate will reject until resolved).
-   - **DRIFT_STALE_PKG** → run `gstack-version-bump repair` (syncs package.json to VERSION). No re-bump; reuse `currentVersion` for CHANGELOG + PR.
+   - **DRIFT_STALE_PKG** → run `version-bump repair` (syncs package.json to VERSION). No re-bump; reuse `currentVersion` for CHANGELOG + PR.
    - **DRIFT_UNEXPECTED** → **STOP**. package.json disagrees with VERSION while VERSION matches base — a manual edit bypassed ship. Reconcile manually, then re-run.
 
 2. **Decide the bump level** from the diff (agent judgment):
@@ -208,7 +208,7 @@ stay agent judgment; the slot pick stays `gstack-next-version`.
    ```bash
    bun run  write --version "$NEW_VERSION"
    ```
-   The CLI validates the version pattern (4-digit `MAJOR.MINOR.PATCH.MICRO`; 3-digit for repos whose pinned version source uses plain semver) and writes VERSION, the manifest, and the manifest's npm lockfiles (`package-lock.json` / `npm-shrinkwrap.json`) when they already exist — never created. The manifest is resolved as `--package-json-path` → `.gstack/package-json-path` → `./package.json`, so a repo whose only Node package lives in a subdirectory (`web/`, `app/`) is covered by a one-line pin instead of silently getting a VERSION-only bump. npm rejects 4-component versions, so the manifest and lockfiles carry the npm-valid 3-digit translation (`1.67.0.0` → `1.67.0`); VERSION stays the 4-digit source of truth and classify judges drift against the translated form. On a half-write it exits 3 — re-run, and classify will report DRIFT_STALE_PKG for `repair` to fix.
+   The CLI validates the version pattern (4-digit `MAJOR.MINOR.PATCH.MICRO`; 3-digit for repos whose pinned version source uses plain semver) and writes VERSION, the manifest, and the manifest's npm lockfiles (`package-lock.json` / `npm-shrinkwrap.json`) when they already exist — never created. The manifest is resolved as `--package-json-path` → `./docs/package-json-path` → `./package.json`, so a repo whose only Node package lives in a subdirectory (`web/`, `app/`) is covered by a one-line pin instead of silently getting a VERSION-only bump. npm rejects 4-component versions, so the manifest and lockfiles carry the npm-valid 3-digit translation (`1.67.0.0` → `1.67.0`); VERSION stays the 4-digit source of truth and classify judges drift against the translated form. On a half-write it exits 3 — re-run, and classify will report DRIFT_STALE_PKG for `repair` to fix.
 
 5. **Record the release decision** (durable cross-session memory). The bump level is a real decision the next session should not re-derive blind:
    ```bash
@@ -295,7 +295,7 @@ If `WIP_COUNT` > 0, collect the WIP context first so it survives the squash:
 # This file becomes input to the CHANGELOG entry and may inform PR body context.
 mkdir -p "$(git rev-parse --show-toplevel)/.gstack"
 git log <base>..HEAD --grep="^WIP:" --format="%H%n%B%n---END---" > \
-  "$(git rev-parse --show-toplevel)/.gstack/wip-context-before-squash.md" 2>/dev/null || true
+  "$(git rev-parse --show-toplevel)/./docs/wip-context-before-squash.md" 2>/dev/null || true
 ```
 
 **Non-destructive squash strategy:**
@@ -444,7 +444,7 @@ _HOOKS_IN_GIT_DIR="no"
 case "$_HOOKS_DIR" in
   "$_GIT_DIR"/*|"$_GIT_COMMON"/*|hooks|.git/hooks) _HOOKS_IN_GIT_DIR="yes" ;;
 esac
-_PREPUSH_PROMPTED=$([ -f "${GSTACK_HOME:-$HOME/.gstack}/.redact-prepush-prompted" ] && echo "yes" || echo "no")
+_PREPUSH_PROMPTED=$([ -f "${TSTACK_HOME:-./}/.redact-prepush-prompted" ] && echo "yes" || echo "no")
 echo "REDACT_PREPUSH: $_REDACT_PREPUSH"
 echo "HOOK_INSTALLED: $_HOOK_INSTALLED"
 echo "HOOKS_IN_GIT_DIR: $_HOOKS_IN_GIT_DIR"
@@ -467,7 +467,7 @@ Branch on the echoed values:
 
    > gstack can install a per-repo git pre-push hook that blocks pushes
    > containing credentials (API keys, tokens, private keys). It's a
-   > guardrail, not enforcement — `GSTACK_REDACT_PREPUSH=skip` bypasses it.
+   > guardrail, not enforcement — `TSTACK_REDACT_PREPUSH=skip` bypasses it.
    > Install it for repos you ship from?
 
    Options:
@@ -480,7 +480,7 @@ Branch on the echoed values:
    ALWAYS (after either answer, but NOT if the question itself failed to
    render — a failed AskUserQuestion must re-offer next time):
    ```bash
-   touch "${GSTACK_HOME:-$HOME/.gstack}/.redact-prepush-prompted"
+   touch "${TSTACK_HOME:-./}/.redact-prepush-prompted"
    ```
 3. **Anything else** (declined earlier, or already installed) — continue
    without comment.
@@ -569,7 +569,7 @@ You ran a carved skill. For your situation, list every section the Section index
 named as applying, and confirm you issued a Read for each one. If you executed any
 of those steps from memory without reading its section, you skipped the source of
 truth — STOP, Read it now, and redo that step. Deterministic version work goes
-through `gstack-version-bump`; never hand-roll the VERSION/package.json write.
+through `version-bump`; never hand-roll the VERSION/package.json write.
 
 ---
 

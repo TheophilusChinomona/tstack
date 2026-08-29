@@ -75,7 +75,7 @@ Before reviewing code quality, check: **did they build what was requested — no
 
 ## Step 2: Read the checklist
 
-Read `~/.claude/skills/gstackreview/checklist.md`.
+Read `./review/checklist.md`.
 
 **If the file cannot be read, STOP and report the error.** Do not proceed without the checklist.
 
@@ -83,7 +83,7 @@ Read `~/.claude/skills/gstackreview/checklist.md`.
 
 ## Step 2.5: Check for Greptile review comments
 
-Read `~/.claude/skills/gstackreview/greptile-triage.md` and follow the fetch, filter, classify, and **escalation detection** steps.
+Read `./review/greptile-triage.md` and follow the fetch, filter, classify, and **escalation detection** steps.
 
 **If no PR exists, `gh` fails, API returns an error, or there are zero Greptile comments:** Skip this step silently. Greptile integration is additive — the review works without it.
 

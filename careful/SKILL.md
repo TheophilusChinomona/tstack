@@ -14,7 +14,7 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "bash $HOME/.claude/skills/gstackcareful/bin/check-careful.sh"
+          command: "bash ./careful/bin/check-careful.sh"
           statusMessage: "Checking for destructive commands..."
 ---
 
@@ -41,7 +41,7 @@ echo '{"skill":"careful","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(base
 
 | Pattern | Example | Risk |
 |---------|---------|------|
-| `rm -rf` / `rm -r` / `rm --recursive` | `rm -rf /var/data` | Recursive delete |
+| `rm -rf` / `rm -r` / `rm --recursive` | `rm -rf ./data` | Recursive delete |
 | `DROP TABLE` / `DROP DATABASE` | `DROP TABLE users;` | Data loss |
 | `TRUNCATE` | `TRUNCATE orders;` | Data loss |
 | `git push --force` / `-f` | `git push -f origin main` | History rewrite |

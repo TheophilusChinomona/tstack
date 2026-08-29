@@ -15,17 +15,17 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "bash $HOME/.claude/skills/gstackcareful/bin/check-careful.sh"
+          command: "bash ./careful/bin/check-careful.sh"
           statusMessage: "Checking for destructive commands..."
     - matcher: "Edit"
       hooks:
         - type: command
-          command: "bash $HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"
+          command: "bash ./freeze/bin/check-freeze.sh"
           statusMessage: "Checking freeze boundary..."
     - matcher: "Write"
       hooks:
         - type: command
-          command: "bash $HOME/.claude/skills/gstackfreeze/bin/check-freeze.sh"
+          command: "bash ./freeze/bin/check-freeze.sh"
           statusMessage: "Checking freeze boundary..."
 ---
 
@@ -69,7 +69,7 @@ echo "$FREEZE_DIR"
 ```bash
 FREEZE_DIR="${FREEZE_DIR%/}/"
 eval "$()"
-STATE_DIR="$GSTACK_STATE_ROOT"
+STATE_DIR="$TSTACK_STATE_ROOT"
 mkdir -p "$STATE_DIR"
 echo "$FREEZE_DIR" > "$STATE_DIRfreeze-dir.txt"
 echo "Freeze boundary set: $FREEZE_DIR"

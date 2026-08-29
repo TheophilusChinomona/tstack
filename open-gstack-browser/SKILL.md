@@ -84,7 +84,7 @@ anti-bot stealth, and custom branding. You see every action in real time.
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/browse/dist/browse" ] && B="$_ROOT/browse/dist/browse"
-[ -z "$B" ] && B="$HOME/.claude/skills/gstackbrowse/distbrowse"
+[ -z "$B" ] && B="./browse/distbrowse"
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -122,12 +122,12 @@ positives and Chromium profile lock conflicts.
 
 ```bash
 # Kill any existing browse server
-if [ -f "$(git rev-parse --show-toplevel 2>/dev/null)/.gstackbrowse.json" ]; then
-  _OLD_PID=$(cat "$(git rev-parse --show-toplevel)/.gstackbrowse.json" 2>/dev/null | grep -o '"pid":[0-9]*' | grep -o '[0-9]*')
+if [ -f "$(git rev-parse --show-toplevel 2>/dev/null)/.browse.json" ]; then
+  _OLD_PID=$(cat "$(git rev-parse --show-toplevel)/.browse.json" 2>/dev/null | grep -o '"pid":[0-9]*' | grep -o '[0-9]*')
   [ -n "$_OLD_PID" ] && kill "$_OLD_PID" 2>/dev/null || true
   sleep 1
   [ -n "$_OLD_PID" ] && kill -9 "$_OLD_PID" 2>/dev/null || true
-  rm -f "$(git rev-parse --show-toplevel)/.gstackbrowse.json"
+  rm -f "$(git rev-parse --show-toplevel)/.browse.json"
 fi
 # Clean Chromium profile locks (can persist after crashes)
 _PROFILE_DIR="./docs/chromium-profile"
@@ -168,7 +168,7 @@ $B status
 Confirm the output shows `Mode: headed`. Read the port from the state file:
 
 ```bash
-cat "$(git rev-parse --show-toplevel 2>/dev/null)/.gstackbrowse.json" 2>/dev/null | grep -o '"port":[0-9]*' | grep -o '[0-9]*'
+cat "$(git rev-parse --show-toplevel 2>/dev/null)/.browse.json" 2>/dev/null | grep -o '"port":[0-9]*' | grep -o '[0-9]*'
 ```
 
 The port should be **34567**. If it's different, note it — the user may need it
@@ -179,8 +179,8 @@ Also find the extension path so you can help the user if they need to load it ma
 ```bash
 _EXT_PATH=""
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-[ -n "$_ROOT" ] && [ -f "$_ROOT/.claude/skills/gstack/extension/manifest.json" ] && _EXT_PATH="$_ROOT/.claude/skills/gstack/extension"
-[ -z "$_EXT_PATH" ] && [ -f "$HOME/.claude/skills/gstack/extension/manifest.json" ] && _EXT_PATH="$HOME/.claude/skills/gstack/extension"
+[ -n "$_ROOT" ] && [ -f "$_ROOT/.claude/skills/extension/manifest.json" ] && _EXT_PATH="$_ROOT/.claude/skills/extension"
+[ -z "$_EXT_PATH" ] && [ -f "./extension/manifest.json" ] && _EXT_PATH="./extension"
 echo "EXTENSION_PATH: ${_EXT_PATH:-NOT FOUND}"
 ```
 
